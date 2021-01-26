@@ -31,10 +31,8 @@ public class User {
     @Column(unique = true)
     private String identifying;
     @NotNull
-    @NotEmpty
     private Date creationDate;
     @NotNull
-    @NotEmpty
     private Date connectionDate;
     @NotNull
     @NotEmpty
