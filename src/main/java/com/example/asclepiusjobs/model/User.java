@@ -5,14 +5,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 public class User {
     @GeneratedValue
     @Id
     private Long id;
+    @NotNull
+    private boolean active;
     @NotNull
     @NotEmpty
     private String firstName;
@@ -60,6 +60,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getFirstName() {

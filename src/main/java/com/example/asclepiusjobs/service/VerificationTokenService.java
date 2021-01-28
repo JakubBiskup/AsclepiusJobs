@@ -1,0 +1,45 @@
+package com.example.asclepiusjobs.service;
+
+import com.example.asclepiusjobs.model.User;
+import com.example.asclepiusjobs.model.VerificationToken;
+import com.example.asclepiusjobs.repository.VerificationTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class VerificationTokenService {
+
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
+
+    public VerificationToken generateVerificationToken(User user){
+        String token= UUID.randomUUID().toString();
+        VerificationToken verificationToken= new VerificationToken(token,user);
+        //send mail with link containing the token
+        return verificationTokenRepository.save(verificationToken);
+    }
+
+    public VerificationToken findAndValidateVerificationToken(String token) throws Exception {
+        Optional<VerificationToken> verificationTokenOptional=verificationTokenRepository.findByToken(token);
+        if(verificationTokenOptional.isPresent()){
+            VerificationToken verificationToken=verificationTokenOptional.get();
+            if(isTokenExpired(verificationToken)){
+                throw new Exception("Verification token expired");
+            }
+            return verificationToken;
+        }else{
+            throw new Exception("Bad Verification Token");
+        }
+    }
+
+    public boolean isTokenExpired(VerificationToken verificationToken){
+        Calendar calendar= Calendar.getInstance();
+        Date expirationDate= verificationToken.getExpirationDate();
+        return !calendar.before(expirationDate);
+    }
+}

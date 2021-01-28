@@ -17,6 +17,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private VerificationTokenService verificationTokenService;
+
     public User registerNewHealthProfessional(HealthProfessionalDto healthProfessionalDto) throws Exception {
         if(identifyingExists(healthProfessionalDto.getEmail())){
             throw new Exception("There is an account with that email address:"+healthProfessionalDto.getEmail());
@@ -36,7 +39,11 @@ public class UserService {
         newHealthProfessional.setConnectionDate(new Date());
         //location
         //cv
-        return userRepository.save(newHealthProfessional);
+        newHealthProfessional.setActive(false);
+        User savedUser=userRepository.save(newHealthProfessional);
+        verificationTokenService.generateVerificationToken(savedUser);
+        //send confirmation mail
+        return savedUser;
     }
 
     private boolean identifyingExists(String identifying){

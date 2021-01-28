@@ -18,8 +18,7 @@ public class AsclepiusUserDetails implements UserDetails {
     public AsclepiusUserDetails(User user){
         this.username=user.getIdentifying();
         this.password=user.getPassword();
-
-        this.active=true; //change this later
+        this.active=user.isActive();
 
         SimpleGrantedAuthority authority=new SimpleGrantedAuthority(user.getRole());
         List<GrantedAuthority> authorityList=new ArrayList<>();
