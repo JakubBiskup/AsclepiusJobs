@@ -17,10 +17,13 @@ public class VerificationTokenService {
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
 
+    @Autowired
+    EmailService emailService;
+
     public VerificationToken generateVerificationToken(User user){
         String token= UUID.randomUUID().toString();
         VerificationToken verificationToken= new VerificationToken(token,user);
-        //send mail with link containing the token
+        emailService.sendEmailConfirmationLink(user,verificationToken.getToken());
         return verificationTokenRepository.save(verificationToken);
     }
 
