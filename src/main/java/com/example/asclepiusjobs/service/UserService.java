@@ -46,6 +46,11 @@ public class UserService {
         return savedUser;
     }
 
+    public User saveOrUpdate(User user){
+        userRepository.save(user);
+        return user;
+    }
+
     private boolean identifyingExists(String identifying){
         return userRepository.findByIdentifying(identifying).isPresent();
     }

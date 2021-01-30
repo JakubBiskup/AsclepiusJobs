@@ -34,6 +34,9 @@ public class VerificationToken {
 
     }
 
+    public VerificationToken() {
+    }
+
     public Long getId() {
         return id;
     }

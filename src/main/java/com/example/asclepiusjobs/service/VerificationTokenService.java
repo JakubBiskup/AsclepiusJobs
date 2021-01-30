@@ -28,7 +28,9 @@ public class VerificationTokenService {
     }
 
     public VerificationToken findAndValidateVerificationToken(String token) throws Exception {
+        System.out.println("token String: " +token);
         Optional<VerificationToken> verificationTokenOptional=verificationTokenRepository.findByToken(token);
+        System.out.println("token:   "+verificationTokenOptional.get().getToken()); //debug line
         if(verificationTokenOptional.isPresent()){
             VerificationToken verificationToken=verificationTokenOptional.get();
             if(isTokenExpired(verificationToken)){
@@ -43,6 +45,6 @@ public class VerificationTokenService {
     public boolean isTokenExpired(VerificationToken verificationToken){
         Calendar calendar= Calendar.getInstance();
         Date expirationDate= verificationToken.getExpirationDate();
-        return !calendar.before(expirationDate);
+        return !calendar.getTime().before(expirationDate);
     }
 }
