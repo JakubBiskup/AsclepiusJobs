@@ -13,22 +13,23 @@ public class AsclepiusUserDetails implements UserDetails {
     private String username;
     private String password;
     private boolean active;
-    private List<GrantedAuthority> role;
+    private List<GrantedAuthority> roles;
 
     public AsclepiusUserDetails(User user){
-        this.username=user.getIdentifying();
+        this.username=user.getEmail();
         this.password=user.getPassword();
         this.active=user.isActive();
-
-        SimpleGrantedAuthority authority=new SimpleGrantedAuthority(user.getRole());
         List<GrantedAuthority> authorityList=new ArrayList<>();
-        authorityList.add(authority);
-        this.role=authorityList;
+        for(Role role:user.getRoles()){                                  // check later
+            SimpleGrantedAuthority authority=new SimpleGrantedAuthority(role.getName());
+            authorityList.add(authority);
+        }
+        this.roles=authorityList;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role;
+        return roles;
     }
 
     @Override

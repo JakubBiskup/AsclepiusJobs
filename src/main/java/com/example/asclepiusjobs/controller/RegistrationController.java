@@ -3,7 +3,6 @@ package com.example.asclepiusjobs.controller;
 import com.example.asclepiusjobs.dto.HealthProfessionalDto;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.model.VerificationToken;
-import com.example.asclepiusjobs.repository.VerificationTokenRepository;
 import com.example.asclepiusjobs.service.UserService;
 import com.example.asclepiusjobs.service.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;

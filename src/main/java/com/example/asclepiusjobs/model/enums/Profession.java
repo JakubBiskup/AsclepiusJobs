@@ -1,0 +1,5 @@
+package com.example.asclepiusjobs.model.enums;
+
+public enum Profession {
+    DOCTOR,NURSE,PARAMEDIC,TECHNICIAN,SURGEON,PHYSIOTHERAPIST,SECRETARY,MIDWIFE,PHARMACIST,PSYCHOLOGIST,DRIVER,OTHER
+}

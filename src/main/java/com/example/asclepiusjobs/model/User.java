@@ -1,10 +1,14 @@
 package com.example.asclepiusjobs.model;
 
+import com.example.asclepiusjobs.model.enums.Profession;
+import com.example.asclepiusjobs.model.enums.Salutation;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -19,40 +23,42 @@ public class User {
     @NotNull
     @NotEmpty
     private String lastName;
+    @Enumerated
+    private Salutation salutation;
     @NotNull
     @NotEmpty
     @Email
+    @Column(unique = true)
     private String email;
     @NotNull
     @NotEmpty
     private String password;
     @NotNull
-    @NotEmpty
-    @Column(unique = true)
-    private String identifying;
+    private Date createTime;
     @NotNull
-    private Date creationDate;
-    @NotNull
-    private Date connectionDate;
-    @NotNull
-    @NotEmpty
-    private String role;
-    private Boolean isFemale;
-    private String profession;
+    private Date lastActivityTime;
+    private Date updateTime;
+    @Enumerated
+    private Profession profession;
 
     @ManyToOne
     private Location location;
 
-    private String mail;
-
     private String phone;
-    private Long cv_id;            //
-   // private Set<SearchProfile> searchProfiles; //
 
-  //  private Set<Right> rights; //
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "cv_id", referencedColumnName = "id")
+    private Cv cv;
+
     @ManyToOne
     @JoinColumn(name = "health_establishment_id")
     private HealthEstablishment healthEstablishment;
+
+    @ManyToMany
+    @JoinTable(name = "user_role",
+    joinColumns = @JoinColumn(name = "role_id"),
+    inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -102,51 +108,27 @@ public class User {
         this.password = password;
     }
 
-    public String getIdentifying() {
-        return identifying;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setIdentifying(String identifying) {
-        this.identifying = identifying;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getLastActivityTime() {
+        return lastActivityTime;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setLastActivityTime(Date lastActivityTime) {
+        this.lastActivityTime = lastActivityTime;
     }
 
-    public Date getConnectionDate() {
-        return connectionDate;
-    }
-
-    public void setConnectionDate(Date connectionDate) {
-        this.connectionDate = connectionDate;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Boolean getFemale() {
-        return isFemale;
-    }
-
-    public void setFemale(Boolean female) {
-        isFemale = female;
-    }
-
-    public String getProfession() {
+    public Profession getProfession() {
         return profession;
     }
 
-    public void setProfession(String profession) {
+    public void setProfession(Profession profession) {
         this.profession = profession;
     }
 
@@ -158,14 +140,6 @@ public class User {
         this.location = location;
     }
 
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -174,19 +148,43 @@ public class User {
         this.phone = phone;
     }
 
-    public Long getCv_id() {
-        return cv_id;
-    }
-
-    public void setCv_id(Long cv_id) {
-        this.cv_id = cv_id;
-    }
-
     public HealthEstablishment getHealthEstablishment() {
         return healthEstablishment;
     }
 
     public void setHealthEstablishment(HealthEstablishment healthEstablishment) {
         this.healthEstablishment = healthEstablishment;
+    }
+
+    public Salutation getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(Salutation salutation) {
+        this.salutation = salutation;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Cv getCv() {
+        return cv;
+    }
+
+    public void setCv(Cv cv) {
+        this.cv = cv;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

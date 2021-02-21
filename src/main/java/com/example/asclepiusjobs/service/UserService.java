@@ -21,22 +21,22 @@ public class UserService {
     private VerificationTokenService verificationTokenService;
 
     public User registerNewHealthProfessional(HealthProfessionalDto healthProfessionalDto) throws Exception {
-        if(identifyingExists(healthProfessionalDto.getEmail())){
+        if(emailExists(healthProfessionalDto.getEmail())){
             throw new Exception("There is an account with that email address:"+healthProfessionalDto.getEmail());
         }
         User newHealthProfessional = new User();
         newHealthProfessional.setEmail(healthProfessionalDto.getEmail());
-        newHealthProfessional.setIdentifying(healthProfessionalDto.getEmail());
+
         newHealthProfessional.setProfession(healthProfessionalDto.getProfession());
         newHealthProfessional.setFirstName(healthProfessionalDto.getFirstName());
         newHealthProfessional.setLastName(healthProfessionalDto.getLastName());
-        newHealthProfessional.setFemale(healthProfessionalDto.getFemale());
+        newHealthProfessional.setSalutation(healthProfessionalDto.getSalutation());
         newHealthProfessional.setPhone(healthProfessionalDto.getPhone());
         PasswordEncoder encoder=new BCryptPasswordEncoder();
         newHealthProfessional.setPassword(encoder.encode(healthProfessionalDto.getPassword()));
-        newHealthProfessional.setRole("ROLE_HEALTH_PROFESSIONAL");
-        newHealthProfessional.setCreationDate(new Date());
-        newHealthProfessional.setConnectionDate(new Date());
+        //newHealthProfessional.setRole("ROLE_HEALTH_PROFESSIONAL");
+        newHealthProfessional.setCreateTime(new Date());
+        newHealthProfessional.setLastActivityTime(new Date());
         //location
         //cv
         newHealthProfessional.setActive(false);
@@ -51,7 +51,7 @@ public class UserService {
         return user;
     }
 
-    private boolean identifyingExists(String identifying){
-        return userRepository.findByIdentifying(identifying).isPresent();
+    private boolean emailExists(String email){
+        return userRepository.findByEmail(email).isPresent();
     }
 }

@@ -1,5 +1,8 @@
 package com.example.asclepiusjobs.dto;
 
+import com.example.asclepiusjobs.model.enums.Profession;
+import com.example.asclepiusjobs.model.enums.Salutation;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,16 +22,12 @@ public class HealthProfessionalDto {
     @NotEmpty
     private String password;
     @NotNull
-    @NotEmpty
-    private Boolean female;
+    private Salutation salutation;
     @NotNull
-    @NotEmpty
-    private String profession;
+    private Profession profession;
     private String phone;
 
     //location
-    //mail
-    //cv
 
 
     public String getFirstName() {
@@ -63,27 +62,27 @@ public class HealthProfessionalDto {
         this.password = password;
     }
 
-    public Boolean getFemale() {
-        return female;
-    }
-
-    public void setFemale(Boolean female) {
-        this.female = female;
-    }
-
-    public String getProfession() {
-        return profession;
-    }
-
-    public void setProfession(String profession) {
-        this.profession = profession;
-    }
-
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Salutation getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(Salutation salutation) {
+        this.salutation = salutation;
+    }
+
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
     }
 }

@@ -28,9 +28,7 @@ public class VerificationTokenService {
     }
 
     public VerificationToken findAndValidateVerificationToken(String token) throws Exception {
-        System.out.println("token String: " +token);
         Optional<VerificationToken> verificationTokenOptional=verificationTokenRepository.findByToken(token);
-        System.out.println("token:   "+verificationTokenOptional.get().getToken()); //debug line
         if(verificationTokenOptional.isPresent()){
             VerificationToken verificationToken=verificationTokenOptional.get();
             if(isTokenExpired(verificationToken)){

@@ -18,12 +18,12 @@ public class AsclepiusUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String identifying) {
-        Optional<User> optionalUser=userRepository.findByIdentifying(identifying);
+    public UserDetails loadUserByUsername(String email) {
+        Optional<User> optionalUser=userRepository.findByEmail(email);
         if(optionalUser.isPresent()){
             return new AsclepiusUserDetails(optionalUser.get());
         }else {
-            throw new UsernameNotFoundException("email/username was not found");
+            throw new UsernameNotFoundException("email was not found");
         }
     }
 }
