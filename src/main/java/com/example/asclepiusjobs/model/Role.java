@@ -1,14 +1,12 @@
 package com.example.asclepiusjobs.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
+@Table(name = "auth_role")
 public class Role {
     @Id
     @GeneratedValue
@@ -20,6 +18,12 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     Set<User> users;
+
+    @ManyToMany
+    @JoinTable(name = "role_right",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "right_id"))
+    private Set<Right> rights;
 
     public Long getId() {
         return id;
@@ -43,5 +47,13 @@ public class Role {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Set<Right> getRights() {
+        return rights;
+    }
+
+    public void setRights(Set<Right> rights) {
+        this.rights = rights;
     }
 }
