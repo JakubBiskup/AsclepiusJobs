@@ -1,9 +1,8 @@
 package com.example.asclepiusjobs.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 public class Cv {
@@ -14,11 +13,27 @@ public class Cv {
     private String title;
     private String interests;
     private boolean available;
+    @NotNull
     private boolean visibility;
-    private String photo_link;
+    @Column(name = "photo_path")
+    private String photoPath;
 
     @OneToOne(mappedBy = "cv")
     private User user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "cv_skill",
+            joinColumns = @JoinColumn(name = "cv_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private Set<Skill> skills;
+
+    @OneToMany(mappedBy = "cv")
+    private Set<Language> languages;
+
+    @OneToMany(mappedBy = "cv")
+    private Set<Experience> experienceSet;
 
     public Long getId() {
         return id;
@@ -60,12 +75,12 @@ public class Cv {
         this.visibility = visibility;
     }
 
-    public String getPhoto_link() {
-        return photo_link;
+    public String getPhotoPath() {
+        return photoPath;
     }
 
-    public void setPhoto_link(String photo_link) {
-        this.photo_link = photo_link;
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public User getUser() {
@@ -74,5 +89,29 @@ public class Cv {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public Set<Language> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(Set<Language> languages) {
+        this.languages = languages;
+    }
+
+    public Set<Experience> getExperienceSet() {
+        return experienceSet;
+    }
+
+    public void setExperienceSet(Set<Experience> experienceSet) {
+        this.experienceSet = experienceSet;
     }
 }
