@@ -20,6 +20,9 @@ public class Skill {
     @ManyToMany(mappedBy = "skills")
     private Set<Cv> cvs;
 
+    @ManyToMany(mappedBy = "skillsRequired")
+    private Set<JobOffer> jobOffers;
+
     public Long getId() {
         return id;
     }
@@ -42,5 +45,13 @@ public class Skill {
 
     public void setCvs(Set<Cv> cvs) {
         this.cvs = cvs;
+    }
+
+    public Set<JobOffer> getJobOffers() {
+        return jobOffers;
+    }
+
+    public void setJobOffers(Set<JobOffer> jobOffers) {
+        this.jobOffers = jobOffers;
     }
 }
