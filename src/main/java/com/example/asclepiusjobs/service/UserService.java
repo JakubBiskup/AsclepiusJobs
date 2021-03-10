@@ -35,7 +35,6 @@ public class UserService {
         PasswordEncoder encoder=new BCryptPasswordEncoder();
         newHealthProfessional.setPassword(encoder.encode(healthProfessionalDto.getPassword()));
         //newHealthProfessional.setRole("ROLE_HEALTH_PROFESSIONAL");
-        newHealthProfessional.setCreateTime(new Date());
         newHealthProfessional.setLastActivityTime(new Date());
         //location
         //cv

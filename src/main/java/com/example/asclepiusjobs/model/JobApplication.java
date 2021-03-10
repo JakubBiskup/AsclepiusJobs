@@ -1,6 +1,7 @@
 package com.example.asclepiusjobs.model;
 
 import com.example.asclepiusjobs.model.enums.JobApplicationState;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,7 +29,9 @@ public class JobApplication {
     @Column(name = "state", nullable = false)
     private JobApplicationState state;
 
-    @Column(name = "create_time",nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_time")
     private Date createTime;
 
     public JobOffer getJobOffer() {

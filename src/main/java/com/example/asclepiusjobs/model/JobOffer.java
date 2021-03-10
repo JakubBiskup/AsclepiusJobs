@@ -1,6 +1,8 @@
 package com.example.asclepiusjobs.model;
 
 import com.example.asclepiusjobs.model.enums.Profession;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -51,9 +53,13 @@ public class JobOffer {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "create_time", nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_time")
     private Date createTime;
 
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_time")
     private Date updateTime;
 

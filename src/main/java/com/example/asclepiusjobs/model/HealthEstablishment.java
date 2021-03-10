@@ -1,6 +1,9 @@
 package com.example.asclepiusjobs.model;
 
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -35,10 +38,14 @@ public class HealthEstablishment {
     @Column(name = "contact_email")
     private String contactEmail;
 
-    @NotNull
-    @NotEmpty
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_time")
     private Date createTime;
 
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "update_time")
     private Date updateTime;
 
     @ManyToOne

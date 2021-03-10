@@ -2,6 +2,8 @@ package com.example.asclepiusjobs.model;
 
 import com.example.asclepiusjobs.model.enums.Profession;
 import com.example.asclepiusjobs.model.enums.Salutation;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -33,10 +35,15 @@ public class User {
     @NotNull
     @NotEmpty
     private String password;
-    @NotNull
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_time")
     private Date createTime;
     @NotNull
     private Date lastActivityTime;
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "update_time")
     private Date updateTime;
     @Enumerated
     private Profession profession;
