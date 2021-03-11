@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @CrossOrigin
 @RestController
 public class RegistrationController {
@@ -20,8 +22,8 @@ public class RegistrationController {
     private VerificationTokenService verificationTokenService;
 
     @PostMapping(value = "/professional/register")
-    public ResponseEntity registerAsHealthProfessional(@RequestBody HealthProfessionalDto healthProfessionalUser) {
-        //createToken ?
+    public ResponseEntity registerAsHealthProfessional(@RequestBody @Valid HealthProfessionalDto healthProfessionalUser) {
+        //currently returns 400 on password without digit, special character, lowercase letter or uppercase letter. Handle this better
         try{
             userService.registerNewHealthProfessional(healthProfessionalUser);
         }catch (Exception e){                             // handle this better

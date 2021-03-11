@@ -6,6 +6,7 @@ import com.example.asclepiusjobs.model.enums.Salutation;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class HealthProfessionalDto {
     @NotNull
@@ -19,7 +20,7 @@ public class HealthProfessionalDto {
     @Email
     private String email;
     @NotNull
-    @NotEmpty
+    @Pattern(regexp = "^(?![\\S]*\\s)(?=.*\\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=.*[\\!\\\"\\#\\$\\%\\&\\'\\(\\)\\*\\+\\,\\.\\/\\:\\;\\<\\=\\>\\?\\@\\[\\]\\^\\_\\`\\{\\|\\}\\~\\\\\\-]).*$")
     private String password;
     @NotNull
     private Salutation salutation;
