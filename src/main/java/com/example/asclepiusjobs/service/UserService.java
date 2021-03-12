@@ -1,6 +1,7 @@
 package com.example.asclepiusjobs.service;
 
 import com.example.asclepiusjobs.dto.HealthProfessionalDto;
+import com.example.asclepiusjobs.model.Role;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -19,6 +22,9 @@ public class UserService {
 
     @Autowired
     private VerificationTokenService verificationTokenService;
+
+    @Autowired
+    private RoleService roleService;
 
     public User registerNewHealthProfessional(HealthProfessionalDto healthProfessionalDto) throws Exception {
         if(emailExists(healthProfessionalDto.getEmail())){
@@ -34,14 +40,17 @@ public class UserService {
         newHealthProfessional.setPhone(healthProfessionalDto.getPhone());
         PasswordEncoder encoder=new BCryptPasswordEncoder();
         newHealthProfessional.setPassword(encoder.encode(healthProfessionalDto.getPassword()));
-        //newHealthProfessional.setRole("ROLE_HEALTH_PROFESSIONAL");
+
+        Set<Role> roleSet=new HashSet<>();
+        roleSet.add(roleService.getRoleByName("HEALTH_PROFESSIONAL"));
+        newHealthProfessional.setRoles(roleSet);
+
         newHealthProfessional.setLastActivityTime(new Date());
         //location
         //cv
         newHealthProfessional.setActive(false);
         User savedUser=userRepository.save(newHealthProfessional);
         verificationTokenService.generateVerificationToken(savedUser);
-        //send confirmation mail
         return savedUser;
     }
 

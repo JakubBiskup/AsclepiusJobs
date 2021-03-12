@@ -7,29 +7,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class AsclepiusUserDetails implements UserDetails {
 
     private String username;
     private String password;
     private boolean active;
-    private List<GrantedAuthority> roles;
-
+    private List<GrantedAuthority> grantedAuthorities;
     public AsclepiusUserDetails(User user){
         this.username=user.getEmail();
         this.password=user.getPassword();
         this.active=user.isActive();
         List<GrantedAuthority> authorityList=new ArrayList<>();
-        for(Role role:user.getRoles()){                                  // check later
-            SimpleGrantedAuthority authority=new SimpleGrantedAuthority(role.getName());
-            authorityList.add(authority);
+        for(Role role:user.getRoles()){
+            for(Right right:role.getRights()){
+                SimpleGrantedAuthority authority=new SimpleGrantedAuthority(right.getName());
+                authorityList.add(authority);
+            }
+
         }
-        this.roles=authorityList;
+        this.grantedAuthorities = authorityList;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return grantedAuthorities;
     }
 
     @Override

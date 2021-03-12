@@ -47,6 +47,7 @@ public class RegistrationController {
             User user=verificationToken.getUser();
             user.setActive(true);
             userService.saveOrUpdate(user);
+            verificationTokenService.deleteById(verificationToken.getId());
             return ResponseEntity.ok("email verified");
         } catch (Exception e) {                                                             //handle this better
             e.printStackTrace();

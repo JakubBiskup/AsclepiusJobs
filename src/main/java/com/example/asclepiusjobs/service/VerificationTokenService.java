@@ -40,6 +40,10 @@ public class VerificationTokenService {
         }
     }
 
+    public void deleteById(Long verificationTokenId){
+        verificationTokenRepository.deleteById(verificationTokenId);
+    }
+
     public boolean isTokenExpired(VerificationToken verificationToken){
         Calendar calendar= Calendar.getInstance();
         Date expirationDate= verificationToken.getExpirationDate();

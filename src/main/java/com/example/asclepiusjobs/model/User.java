@@ -62,7 +62,7 @@ public class User {
     private HealthEstablishment healthEstablishment;
 
     @ManyToMany
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "user_auth_role",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;

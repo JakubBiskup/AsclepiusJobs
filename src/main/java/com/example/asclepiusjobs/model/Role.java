@@ -20,7 +20,7 @@ public class Role {
     Set<User> users;
 
     @ManyToMany
-    @JoinTable(name = "role_right",
+    @JoinTable(name = "auth_role_auth_right",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "right_id"))
     private Set<Right> rights;
