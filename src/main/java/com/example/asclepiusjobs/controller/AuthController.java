@@ -42,6 +42,6 @@ public class AuthController {
 
     @GetMapping(value = "/health-pros-only")
     public ResponseEntity hiHealthPros(){
-        return ResponseEntity.ok("This is information for health pros only");
+        return ResponseEntity.ok("This is information for health professionals only");
     }
 }

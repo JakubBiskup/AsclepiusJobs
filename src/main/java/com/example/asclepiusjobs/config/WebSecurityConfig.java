@@ -31,9 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
     }
 
-    //change configuration below later
-
-
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors()
@@ -43,6 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/*/register").permitAll()
                 .antMatchers("/account/confirm").permitAll()
                 .antMatchers("/authenticate").permitAll()
+                .antMatchers("/forgotten-password").permitAll()
+                .antMatchers("/reset-password").permitAll()
                 .antMatchers("/authenticated-only").authenticated() //
                 .antMatchers("/health-pros-only").hasAuthority("READ_HEALTH_PROS_ONLY") //
                 .anyRequest().authenticated()

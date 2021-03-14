@@ -5,6 +5,7 @@ import com.example.asclepiusjobs.model.Role;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,5 +62,13 @@ public class UserService {
 
     private boolean emailExists(String email){
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    public User getUserByEmail(String email){
+        if(emailExists(email)){
+            return userRepository.findByEmail(email).get();
+        }else{
+            throw new UsernameNotFoundException("no user found with email: "+email);
+        }
     }
 }

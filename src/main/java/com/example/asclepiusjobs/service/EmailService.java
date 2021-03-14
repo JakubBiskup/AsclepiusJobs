@@ -20,6 +20,12 @@ public class EmailService {
         sendSimpleEmail(user.getEmail(), "Confirm your account on Asclepius Jobs",text);
     }
 
+    public void sendPasswordResetLink(User user, String token){             // change the link later
+        String text="Hello, "+user.getFirstName()+" "+user.getLastName()+", here is a link to reset your password on Asclepius Jobs: https://link-here?token="+token
+                + "If you have not asked for a password reset, please ignore this message.";
+        sendSimpleEmail(user.getEmail(), "Asclepius Jobs password reset",text);
+    }
+
     public void sendSimpleEmail(String to, String subject, String text){
         SimpleMailMessage simpleEmail=new SimpleMailMessage();
         simpleEmail.setFrom(ASCLEPIUS_JOBS_ADDRESS);
