@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/forgotten-password").permitAll()
                 .antMatchers("/reset-password").permitAll()
                 .antMatchers("/authenticated-only").authenticated() //
+                .antMatchers("/delete-my-account").authenticated()
                 .antMatchers("/health-pros-only").hasAuthority("READ_HEALTH_PROS_ONLY") //
                 .anyRequest().authenticated()
                 .and()

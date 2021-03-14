@@ -71,4 +71,8 @@ public class UserService {
             throw new UsernameNotFoundException("no user found with email: "+email);
         }
     }
+
+    public void deleteById(Long id){
+        userRepository.deleteById(id);
+    }
 }

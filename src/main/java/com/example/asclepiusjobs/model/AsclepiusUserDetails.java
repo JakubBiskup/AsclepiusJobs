@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public class AsclepiusUserDetails implements UserDetails {
 
@@ -22,9 +21,9 @@ public class AsclepiusUserDetails implements UserDetails {
         this.password=user.getPassword();
         this.active=user.isActive();
         List<GrantedAuthority> authorityList=new ArrayList<>();
-        List<String> roleNames=new ArrayList<>();
+        List<String> roleNamesList=new ArrayList<>();
         for(Role role:user.getRoles()){
-            roleNames.add(role.getName());
+            roleNamesList.add(role.getName());
             for(Right right:role.getRights()){
                 SimpleGrantedAuthority authority=new SimpleGrantedAuthority(right.getName());
                 authorityList.add(authority);
@@ -32,7 +31,7 @@ public class AsclepiusUserDetails implements UserDetails {
 
         }
         this.grantedAuthorities = authorityList;
-        this.roleNames=roleNames;
+        this.roleNames=roleNamesList;
     }
 
     @Override

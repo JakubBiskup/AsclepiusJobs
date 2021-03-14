@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -48,14 +45,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
-/*
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        boolean shouldNot=false;
-        if(new AntPathMatcher().match("/authenticate", request.getRequestURI())){
-            shouldNot=true;
-        }
-        return shouldNot;
-    }
-*/
 }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,7 @@ public class AuthController {
     AsclepiusUserDetailsService userDetailsService;
 
     @PostMapping(value="/authenticate")
-    public ResponseEntity createToken(@RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
+    public ResponseEntity createToken(@RequestBody AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
         final UserDetails userDetails=userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt= jwtService.createToken(userDetails);

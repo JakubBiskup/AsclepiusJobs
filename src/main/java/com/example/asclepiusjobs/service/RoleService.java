@@ -11,7 +11,7 @@ public class RoleService {
     @Autowired
     RoleRepository roleRepository;
 
-    public Role getRoleByName(String name) throws Exception {
+    public Role getRoleByName(String name){
         return roleRepository.findByName(name);
     }
 }

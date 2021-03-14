@@ -28,7 +28,6 @@ public class ForgottenPasswordController {
 
     @PostMapping(value = "/forgotten-password")
     public ResponseEntity sendPasswordResetMail(@RequestBody String email){
-        System.out.println(email);
         User user=userService.getUserByEmail(email);
         emailService.sendPasswordResetLink(user,passwordResetTokenService.generatePasswordResetToken(user).getToken());
         return ResponseEntity.ok("Password reset link sent. Check your mailbox.");
