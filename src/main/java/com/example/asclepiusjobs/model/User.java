@@ -61,7 +61,7 @@ public class User {
     @JoinColumn(name = "health_establishment_id")
     private HealthEstablishment healthEstablishment;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_auth_role",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))

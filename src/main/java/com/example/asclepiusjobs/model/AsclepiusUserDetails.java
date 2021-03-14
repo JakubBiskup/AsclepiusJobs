@@ -15,12 +15,16 @@ public class AsclepiusUserDetails implements UserDetails {
     private String password;
     private boolean active;
     private List<GrantedAuthority> grantedAuthorities;
+    private List<String> roleNames;
+
     public AsclepiusUserDetails(User user){
         this.username=user.getEmail();
         this.password=user.getPassword();
         this.active=user.isActive();
         List<GrantedAuthority> authorityList=new ArrayList<>();
+        List<String> roleNames=new ArrayList<>();
         for(Role role:user.getRoles()){
+            roleNames.add(role.getName());
             for(Right right:role.getRights()){
                 SimpleGrantedAuthority authority=new SimpleGrantedAuthority(right.getName());
                 authorityList.add(authority);
@@ -28,6 +32,7 @@ public class AsclepiusUserDetails implements UserDetails {
 
         }
         this.grantedAuthorities = authorityList;
+        this.roleNames=roleNames;
     }
 
     @Override
@@ -43,6 +48,10 @@ public class AsclepiusUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public List<String> getRoleNames() {     //
+        return roleNames;
     }
 
     //the following 3 methods always return true for now, change it later

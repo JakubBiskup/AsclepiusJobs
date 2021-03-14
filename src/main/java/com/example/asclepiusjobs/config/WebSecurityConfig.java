@@ -1,5 +1,6 @@
 package com.example.asclepiusjobs.config;
 
+import com.example.asclepiusjobs.filter.JwtRequestFilter;
 import com.example.asclepiusjobs.service.AsclepiusUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AsclepiusUserDetailsService userDetailsService;
+
+    @Autowired
+    JwtRequestFilter jwtRequestFilter;
 
 
     @Override
@@ -37,9 +42,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/*/register").permitAll()
                 .antMatchers("/account/confirm").permitAll()
+                .antMatchers("/authenticate").permitAll()
+                .antMatchers("/authenticated-only").authenticated() //
+                .antMatchers("/health-pros-only").hasAuthority("READ_HEALTH_PROS_ONLY") //
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

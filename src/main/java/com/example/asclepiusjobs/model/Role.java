@@ -19,7 +19,7 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     Set<User> users;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "auth_role_auth_right",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "right_id"))
