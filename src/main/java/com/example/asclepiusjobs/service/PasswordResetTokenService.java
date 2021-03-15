@@ -20,6 +20,8 @@ public class PasswordResetTokenService {
     PasswordResetTokenRepository passwordResetTokenRepository;
 
     public PasswordResetToken generatePasswordResetToken(User user){
+        deleteByUser(user);
+        passwordResetTokenRepository.flush();
         String token= UUID.randomUUID().toString();
         PasswordResetToken passwordResetToken=new PasswordResetToken(token,user);
         return passwordResetTokenRepository.save(passwordResetToken);
@@ -51,5 +53,9 @@ public class PasswordResetTokenService {
     public void deleteExpiredTokens(){
         System.out.println("deleting expired password reset tokens");
         passwordResetTokenRepository.deleteByExpirationDateLessThan(new Date(System.currentTimeMillis()));
+    }
+
+    public void deleteByUser(User user){
+        passwordResetTokenRepository.deleteByUser(user);
     }
 }

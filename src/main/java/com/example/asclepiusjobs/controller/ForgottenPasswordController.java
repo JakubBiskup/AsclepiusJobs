@@ -1,5 +1,6 @@
 package com.example.asclepiusjobs.controller;
 
+import com.example.asclepiusjobs.dto.NewPasswordDto;
 import com.example.asclepiusjobs.model.PasswordResetToken;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.service.EmailService;
@@ -12,8 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.Map;
+import javax.validation.Valid;
 import java.util.concurrent.TimeUnit;
 
 @CrossOrigin
@@ -46,14 +46,14 @@ public class ForgottenPasswordController {
     }
 
     @PostMapping(value = "/reset-password")
-    public ResponseEntity resetPassword(@RequestParam(value = "token") String token, @RequestBody Map<String , String> passwordsMap) throws Exception {
-        if(!passwordsMap.get("password").equals(passwordsMap.get("confirmedPassword"))){
+    public ResponseEntity resetPassword(@RequestParam(value = "token") String token, @RequestBody @Valid NewPasswordDto passwords) throws Exception {
+        if(!passwords.areMatching()){
             return ResponseEntity.badRequest().body("Passwords are not identical");
         }else {
            PasswordResetToken passwordResetToken = passwordResetTokenService.findAndValidatePasswordResetToken(token);
            User user = passwordResetToken.getUser();
            PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
-           String hashedPassword=passwordEncoder.encode(passwordsMap.get("password"));
+           String hashedPassword=passwordEncoder.encode(passwords.getPassword());
            user.setPassword(hashedPassword);
            userService.saveOrUpdate(user);
            passwordResetTokenService.deleteById(passwordResetToken.getId());
