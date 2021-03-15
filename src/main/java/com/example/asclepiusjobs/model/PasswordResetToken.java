@@ -16,7 +16,7 @@ public class PasswordResetToken {
     private String token;
 
     @OneToOne
-    @JoinColumn(nullable = false, name="user_id")
+    @JoinColumn(nullable = false, name="user_id",unique = true)
     private User user;
 
     private Date expirationDate;

@@ -22,16 +22,9 @@ public class RegistrationController {
     private VerificationTokenService verificationTokenService;
 
     @PostMapping(value = "/professional/register")
-    public ResponseEntity registerAsHealthProfessional(@RequestBody @Valid HealthProfessionalDto healthProfessionalUser) {
-        //currently returns 400 on password without digit, special character, lowercase letter or uppercase letter. Handle this better
-        try{
-            userService.registerNewHealthProfessional(healthProfessionalUser);
-        }catch (Exception e){                             // handle this better
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(e);
-        }
-        return ResponseEntity.ok("Registration successful"); //?
-
+    public ResponseEntity registerAsHealthProfessional(@RequestBody @Valid HealthProfessionalDto healthProfessionalUser) throws Exception {
+        userService.registerNewHealthProfessional(healthProfessionalUser);
+        return ResponseEntity.ok("Registration successful");
     }
 
 
@@ -41,18 +34,13 @@ public class RegistrationController {
      */
 
     @PostMapping(value = "/account/confirm")
-    public ResponseEntity confirmEmailAndActivateAccount(@RequestBody String token){
-        try{
-            VerificationToken verificationToken=verificationTokenService.findAndValidateVerificationToken(token);
-            User user=verificationToken.getUser();
-            user.setActive(true);
-            userService.saveOrUpdate(user);
-            verificationTokenService.deleteById(verificationToken.getId());
-            return ResponseEntity.ok("email verified");
-        } catch (Exception e) {                                                             //handle this better
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(e);
-        }
+    public ResponseEntity confirmEmailAndActivateAccount(@RequestBody String token) throws Exception{
+        VerificationToken verificationToken=verificationTokenService.findAndValidateVerificationToken(token);
+        User user=verificationToken.getUser();
+        user.setActive(true);
+        userService.saveOrUpdate(user);
+        verificationTokenService.deleteById(verificationToken.getId());
+        return ResponseEntity.ok("email verified");
     }
 
 }

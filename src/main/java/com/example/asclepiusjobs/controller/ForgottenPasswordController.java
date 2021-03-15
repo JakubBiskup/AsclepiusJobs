@@ -7,11 +7,14 @@ import com.example.asclepiusjobs.service.PasswordResetTokenService;
 import com.example.asclepiusjobs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @CrossOrigin
 @RestController
@@ -27,10 +30,19 @@ public class ForgottenPasswordController {
     PasswordResetTokenService passwordResetTokenService;
 
     @PostMapping(value = "/forgotten-password")
-    public ResponseEntity sendPasswordResetMail(@RequestBody String email){
-        User user=userService.getUserByEmail(email);
-        emailService.sendPasswordResetLink(user,passwordResetTokenService.generatePasswordResetToken(user).getToken());
-        return ResponseEntity.ok("Password reset link sent. Check your mailbox.");
+    public ResponseEntity sendPasswordResetMail(@RequestBody String email) throws Exception {
+        try {
+            User user = userService.getUserByEmail(email);
+            emailService.sendPasswordResetLink(user, passwordResetTokenService.generatePasswordResetToken(user).getToken());
+            return ResponseEntity.ok("Password reset link sent (if there is an account with that email). Check your mailbox.");
+        }catch (UsernameNotFoundException exception){
+            try{
+                TimeUnit.SECONDS.sleep(3); // sleep for 3 seconds to simulate work that would have to be done if the email was found
+            }catch (InterruptedException ie){
+                System.out.println("Sleep interrupted... "+ ie.getMessage());
+            }
+            return  ResponseEntity.ok("Password reset link sent (if there is an account with that email). Check your mailbox.");
+        }
     }
 
     @PostMapping(value = "/reset-password")

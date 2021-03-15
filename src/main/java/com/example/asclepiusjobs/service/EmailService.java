@@ -22,7 +22,7 @@ public class EmailService {
 
     public void sendPasswordResetLink(User user, String token){             // change the link later
         String text="Hello, "+user.getFirstName()+" "+user.getLastName()+", here is a link to reset your password on Asclepius Jobs: https://link-here?token="+token
-                + "If you have not asked for a password reset, please ignore this message.";
+                + "   If you have not asked for a password reset, please ignore this message.";
         sendSimpleEmail(user.getEmail(), "Asclepius Jobs password reset",text);
     }
 

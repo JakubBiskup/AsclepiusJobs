@@ -29,7 +29,7 @@ public class UserService {
 
     public User registerNewHealthProfessional(HealthProfessionalDto healthProfessionalDto) throws Exception {
         if(emailExists(healthProfessionalDto.getEmail())){
-            throw new Exception("There is an account with that email address:"+healthProfessionalDto.getEmail());
+            throw new Exception("There is an account with that email address:"+healthProfessionalDto.getEmail()); // (?)
         }
         User newHealthProfessional = new User();
         newHealthProfessional.setEmail(healthProfessionalDto.getEmail());
@@ -68,7 +68,8 @@ public class UserService {
         if(emailExists(email)){
             return userRepository.findByEmail(email).get();
         }else{
-            throw new UsernameNotFoundException("no user found with email: "+email);
+            System.out.println("no user found with email: "+email);  // helpful sout, delete later
+            throw new UsernameNotFoundException("Something went wrong"); //not giving away the fact that the email does not exist in the database
         }
     }
 

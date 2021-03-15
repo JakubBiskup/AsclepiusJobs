@@ -33,7 +33,7 @@ public class PasswordResetTokenService {
                 return passResetToken;
             }
         }else {
-            throw new Exception("Token not found");
+            throw new Exception("Token not found. Your password reset link might have been used already");
         }
     }
 
