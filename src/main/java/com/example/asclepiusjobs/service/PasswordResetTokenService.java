@@ -5,12 +5,14 @@ import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.repository.PasswordResetTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+@Transactional
 @Service
 public class PasswordResetTokenService {
 
@@ -46,4 +48,8 @@ public class PasswordResetTokenService {
         return !calendar.getTime().before(expirationDate);
     }
 
+    public void deleteExpiredTokens(){
+        System.out.println("deleting expired password reset tokens");
+        passwordResetTokenRepository.deleteByExpirationDateLessThan(new Date(System.currentTimeMillis()));
+    }
 }

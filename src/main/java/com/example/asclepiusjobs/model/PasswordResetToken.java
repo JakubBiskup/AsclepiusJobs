@@ -21,7 +21,7 @@ public class PasswordResetToken {
 
     private Date expirationDate;
 
-    private Date calculateExpirationDate(int expirationTimeInMinutes){             //check
+    private Date calculateExpirationDate(int expirationTimeInMinutes){
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.MINUTE,expirationTimeInMinutes);
         return calendar.getTime();

@@ -5,12 +5,14 @@ import com.example.asclepiusjobs.model.VerificationToken;
 import com.example.asclepiusjobs.repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+@Transactional
 @Service
 public class VerificationTokenService {
 
@@ -48,5 +50,10 @@ public class VerificationTokenService {
         Calendar calendar= Calendar.getInstance();
         Date expirationDate= verificationToken.getExpirationDate();
         return !calendar.getTime().before(expirationDate);
+    }
+
+    public void deleteExpiredTokens(){
+        System.out.println("deleting expired verification tokens");
+        verificationTokenRepository.deleteByExpirationDateLessThan(new Date(System.currentTimeMillis()));
     }
 }
