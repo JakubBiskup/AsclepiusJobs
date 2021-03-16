@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class RoleService {
 
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     public Role getRoleByName(String name){
         return roleRepository.findByName(name);

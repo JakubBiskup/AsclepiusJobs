@@ -25,6 +25,8 @@ public class ControllerAdviceExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage invalidArgument(MethodArgumentNotValidException exception){
+        System.out.println("Printing stack trace to sout: ");                      //delete this line later
+        exception.printStackTrace();                                            //delete this line or move to logs later
         return new ErrorMessage(400, "One or more of your inputs is not what we expected. This error might be caused by entering an invalid email or violating our password policy");
     }
 

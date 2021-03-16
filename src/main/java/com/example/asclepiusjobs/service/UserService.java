@@ -1,6 +1,7 @@
 package com.example.asclepiusjobs.service;
 
 import com.example.asclepiusjobs.dto.HealthProfessionalDto;
+import com.example.asclepiusjobs.model.Location;
 import com.example.asclepiusjobs.model.Role;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.repository.UserRepository;
@@ -27,6 +28,9 @@ public class UserService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private LocationService locationService;
+
     public User registerNewHealthProfessional(HealthProfessionalDto healthProfessionalDto) throws Exception {
         if(emailExists(healthProfessionalDto.getEmail())){
             throw new Exception("There is an account with that email address:"+healthProfessionalDto.getEmail()); // (?)
@@ -46,9 +50,10 @@ public class UserService {
         roleSet.add(roleService.getRoleByName("HEALTH_PROFESSIONAL"));
         newHealthProfessional.setRoles(roleSet);
 
+        Location location=locationService.createLocationFromLocationDto(healthProfessionalDto.getLocationDto());
+        newHealthProfessional.setLocation(location);
+
         newHealthProfessional.setLastActivityTime(new Date());
-        //location
-        //cv
         newHealthProfessional.setActive(false);
         User savedUser=userRepository.save(newHealthProfessional);
         verificationTokenService.generateVerificationToken(savedUser);
@@ -56,8 +61,7 @@ public class UserService {
     }
 
     public User saveOrUpdate(User user){
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 
     private boolean emailExists(String email){

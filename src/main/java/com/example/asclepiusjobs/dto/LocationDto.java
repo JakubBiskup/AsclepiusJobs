@@ -1,31 +1,20 @@
-package com.example.asclepiusjobs.model;
+package com.example.asclepiusjobs.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-@Entity
-public class Location {
+public class LocationDto {
 
-
-    @GeneratedValue
-    @Id
-    private Long id;
-    //should some of the fields be not nullable?
     private String street;
     private String house;
     private String apartment;
     private String postalCode;
+    @NotNull
+    @NotEmpty
     private String city;
+    @NotNull
+    @NotEmpty
     private String country;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getStreet() {
         return street;
