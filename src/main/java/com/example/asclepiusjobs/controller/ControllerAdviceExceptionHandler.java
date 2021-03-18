@@ -1,8 +1,9 @@
 package com.example.asclepiusjobs.controller;
 
 import com.example.asclepiusjobs.errorhandling.ErrorMessage;
-import io.jsonwebtoken.MalformedJwtException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.security.SignatureException;
 
 @RestControllerAdvice
 public class ControllerAdviceExceptionHandler {
@@ -40,6 +39,19 @@ public class ControllerAdviceExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorMessage disabledOrNotActivated(DisabledException exception){
         return new ErrorMessage(403, "Your account is not active. This might be caused by not verifying your email.");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorMessage dataIntegrityViolation(DataIntegrityViolationException exception){
+        exception.printStackTrace(); //
+        return new ErrorMessage(500, "Something went wrong."); //should I provide a useful message?
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage messageNotReadable(HttpMessageNotReadableException exception){
+        return new ErrorMessage(400, "One or more of your inputs is not what we expected.This might be caused by entering date in wrong format.");
     }
 
     @ExceptionHandler(value = Exception.class)

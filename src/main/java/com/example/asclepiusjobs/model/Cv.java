@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 public class Cv {
     @Id
-    @GeneratedValue
+    @Column(name = "user_id")
     private Long id;
 
     private String title;
@@ -18,7 +18,9 @@ public class Cv {
     @Column(name = "photo_path")
     private String photoPath;
 
-    @OneToOne(mappedBy = "cv")
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany

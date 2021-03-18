@@ -3,6 +3,7 @@ package com.example.asclepiusjobs.controller;
 import com.example.asclepiusjobs.dto.HealthProfessionalDto;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.model.VerificationToken;
+import com.example.asclepiusjobs.service.CvService;
 import com.example.asclepiusjobs.service.UserService;
 import com.example.asclepiusjobs.service.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,15 @@ public class RegistrationController {
     private UserService userService;
 
     @Autowired
+    private CvService cvService;
+
+    @Autowired
     private VerificationTokenService verificationTokenService;
 
     @PostMapping(value = "/professional/register")
     public ResponseEntity registerAsHealthProfessional(@RequestBody @Valid HealthProfessionalDto healthProfessionalUser) throws Exception {
-        userService.registerNewHealthProfessional(healthProfessionalUser);
+        User user =userService.registerNewHealthProfessional(healthProfessionalUser);
+        cvService.createBlankInvisibleCv(user);
         return ResponseEntity.ok("Registration successful");
     }
 

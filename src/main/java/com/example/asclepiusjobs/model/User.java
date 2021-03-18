@@ -53,8 +53,8 @@ public class User {
 
     private String phone;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "cv_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @PrimaryKeyJoinColumn
     private Cv cv;
 
     @ManyToOne
