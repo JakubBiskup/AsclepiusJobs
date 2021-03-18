@@ -2,18 +2,22 @@ package com.example.asclepiusjobs.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 
 @Service
 public class JwtService {
-    private Key key= Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // this should be stored somewhere safe, change it later
+    String secretString="not a well kept secret! But it is quite a long string, and that's because the key needs to be equal or larger than 256 bits.";
+
+    private Key key= Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
+    //  private Key key= Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String createToken(UserDetails userDetails){
         String jws= Jwts.builder()

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @CrossOrigin
 @RestController
 public class CvController {
@@ -32,7 +34,7 @@ public class CvController {
     }
 
     @PostMapping(value = "/add-experience-to-my-cv")
-    ResponseEntity addExperienceToMyCv(@RequestBody ExperienceDto experienceDto) throws Exception {
+    ResponseEntity addExperienceToMyCv(@Valid @RequestBody ExperienceDto experienceDto) throws Exception {
         Long loggedInUserId=getAuthenticatedUser().getId();
         Cv cv=cvService.getCvById(loggedInUserId);
         experienceService.createExperience(experienceDto,cv);
