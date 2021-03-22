@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class ExperienceService {
@@ -37,5 +38,18 @@ public class ExperienceService {
         newExperience.setEndDate(experienceDto.getEndDate());
         newExperience.setCv(cv);
         return experienceRepository.save(newExperience);
+    }
+
+    public Experience getById(Long id) throws Exception {
+        Optional<Experience> optionalExperience = experienceRepository.findById(id);
+        if(optionalExperience.isPresent()){
+            return optionalExperience.get();
+        }else {
+            throw new Exception("Experience not found");
+        }
+    }
+
+    public void deleteById(Long id){
+        experienceRepository.deleteById(id);
     }
 }

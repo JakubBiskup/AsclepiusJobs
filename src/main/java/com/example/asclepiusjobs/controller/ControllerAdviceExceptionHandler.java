@@ -51,6 +51,7 @@ public class ControllerAdviceExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage messageNotReadable(HttpMessageNotReadableException exception){
+        exception.printStackTrace(); ///
         return new ErrorMessage(400, "One or more of your inputs is not what we expected.This might be caused by entering date in wrong format.");
     }
 

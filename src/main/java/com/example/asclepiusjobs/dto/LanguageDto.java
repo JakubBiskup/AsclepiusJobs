@@ -1,30 +1,15 @@
-package com.example.asclepiusjobs.model;
+package com.example.asclepiusjobs.dto;
 
 import com.example.asclepiusjobs.model.enums.LanguageLevel;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Entity
-public class Language {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class LanguageDto {
     @NotNull
+    @NotEmpty
     private String name;
     private LanguageLevel level;
-
-    @ManyToOne
-    @JoinColumn(name = "cv_id",nullable = false)
-    private Cv cv;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -40,13 +25,5 @@ public class Language {
 
     public void setLevel(LanguageLevel level) {
         this.level = level;
-    }
-
-    public Cv getCv() {
-        return cv;
-    }
-
-    public void setCv(Cv cv) {
-        this.cv = cv;
     }
 }
