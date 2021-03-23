@@ -17,7 +17,7 @@ import java.util.UUID;
 public class PasswordResetTokenService {
 
     @Autowired
-    PasswordResetTokenRepository passwordResetTokenRepository;
+    private PasswordResetTokenRepository passwordResetTokenRepository;
 
     public PasswordResetToken generatePasswordResetToken(User user){
         deleteByUser(user);

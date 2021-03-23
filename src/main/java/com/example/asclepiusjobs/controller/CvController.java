@@ -5,6 +5,7 @@ import com.example.asclepiusjobs.dto.EducationDto;
 import com.example.asclepiusjobs.dto.ExperienceDto;
 import com.example.asclepiusjobs.dto.LanguageDto;
 import com.example.asclepiusjobs.model.Cv;
+import com.example.asclepiusjobs.model.Skill;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,25 +14,29 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
 public class CvController {
 
     @Autowired
-    CvService cvService;
+    private CvService cvService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    ExperienceService experienceService;
+    private ExperienceService experienceService;
 
     @Autowired
-    LanguageService languageService;
+    private LanguageService languageService;
 
     @Autowired
-    EducationService educationService;
+    private EducationService educationService;
+
+    @Autowired
+    private SkillService skillService;
 
 
     @PatchMapping(value = "/update-basic-cv-elements")
@@ -59,6 +64,26 @@ public class CvController {
         Cv myCv= getMyCv();
         educationService.createEducation(myCv,educationDto);
         return ResponseEntity.ok("Education added to your CV");
+    }
+
+    @PostMapping(value = "/skill/add")
+    ResponseEntity addSkillToMyCv(@RequestBody String nameOfSkill){
+        Skill skill= skillService.getByNameOrReturnNull(nameOfSkill);
+        if(skill==null){
+            skill=skillService.createSkill(nameOfSkill);
+        }
+        cvService.addSkillToCv(getMyCv(),skill);
+        return ResponseEntity.ok("Skill ("+skill.getName()+") added to your CV.");
+    }
+
+    @DeleteMapping(value = "/skill/{id}")
+    ResponseEntity removeSkillFromMyCv(@PathVariable Long id) throws Exception {
+        Cv myCv=getMyCv();
+        Set<Skill> skillSet=myCv.getSkills();
+        skillSet.remove(skillService.getById(id));
+        myCv.setSkills(skillSet);
+        cvService.saveOrUpdate(myCv);
+        return ResponseEntity.ok("Skill removed from your CV");
     }
 
     @DeleteMapping(value = "/education/{id}")

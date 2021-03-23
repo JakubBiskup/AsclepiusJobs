@@ -15,10 +15,10 @@ import java.util.Optional;
 public class EducationService {
 
     @Autowired
-    EducationRepository educationRepository;
+    private EducationRepository educationRepository;
 
     @Autowired
-    LocationService locationService;
+    private LocationService locationService;
 
     public Education createEducation(Cv cv, EducationDto educationDto) throws Exception {
         Date startDate=educationDto.getStartDate();

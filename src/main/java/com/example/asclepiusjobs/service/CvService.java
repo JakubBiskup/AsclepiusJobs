@@ -2,12 +2,14 @@ package com.example.asclepiusjobs.service;
 
 import com.example.asclepiusjobs.dto.CvDto;
 import com.example.asclepiusjobs.model.Cv;
+import com.example.asclepiusjobs.model.Skill;
 import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.repository.CvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CvService {
@@ -16,7 +18,7 @@ public class CvService {
     private CvRepository cvRepository;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     public Cv createBlankInvisibleCv(User user){
         Cv cv=new Cv();
@@ -39,6 +41,13 @@ public class CvService {
         cv.setAvailable(cvDto.isAvailable());
         cv.setTitle(cvDto.getTitle());
         cv.setInterests(cvDto.getInterests());
+        return saveOrUpdate(cv);
+    }
+
+    public Cv addSkillToCv(Cv cv, Skill skill){
+        Set<Skill> skillSet=cv.getSkills();
+        skillSet.add(skill);
+        cv.setSkills(skillSet);
         return saveOrUpdate(cv);
     }
 

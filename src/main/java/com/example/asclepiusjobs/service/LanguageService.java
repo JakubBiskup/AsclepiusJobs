@@ -13,7 +13,7 @@ import java.util.Optional;
 public class LanguageService {
 
     @Autowired
-    LanguageRepository languageRepository;
+    private LanguageRepository languageRepository;
 
     public Language createLanguage(Cv cv, LanguageDto languageDto){
         Language language=new Language();

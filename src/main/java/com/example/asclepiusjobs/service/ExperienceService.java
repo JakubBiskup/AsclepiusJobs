@@ -15,10 +15,10 @@ import java.util.Optional;
 public class ExperienceService {
 
     @Autowired
-    ExperienceRepository experienceRepository;
+    private ExperienceRepository experienceRepository;
 
     @Autowired
-    LocationService locationService;
+    private LocationService locationService;
 
     public Experience createExperience(ExperienceDto experienceDto, Cv cv) throws Exception {
         Date startDate=experienceDto.getStartDate();

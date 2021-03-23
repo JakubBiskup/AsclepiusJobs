@@ -20,7 +20,7 @@ public class VerificationTokenService {
     private VerificationTokenRepository verificationTokenRepository;
 
     @Autowired
-    EmailService emailService;
+    private EmailService emailService;
 
     public VerificationToken generateVerificationToken(User user){
         String token= UUID.randomUUID().toString();
