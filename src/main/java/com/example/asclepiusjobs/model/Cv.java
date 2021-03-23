@@ -37,6 +37,9 @@ public class Cv {
     @OneToMany(mappedBy = "cv")
     private Set<Experience> experienceSet;
 
+    @OneToMany(mappedBy = "cv")
+    private Set<Education> educationSet;
+
     public Long getId() {
         return id;
     }
@@ -115,5 +118,13 @@ public class Cv {
 
     public void setExperienceSet(Set<Experience> experienceSet) {
         this.experienceSet = experienceSet;
+    }
+
+    public Set<Education> getEducationSet() {
+        return educationSet;
+    }
+
+    public void setEducationSet(Set<Education> educationSet) {
+        this.educationSet = educationSet;
     }
 }

@@ -34,8 +34,8 @@ public class ExperienceService {
         newExperience.setCompanyName(experienceDto.getCompanyName());
         newExperience.setDescription(experienceDto.getDescription());
         newExperience.setPositionTitle(experienceDto.getPositionTitle());
-        newExperience.setStartDate(experienceDto.getStartDate());
-        newExperience.setEndDate(experienceDto.getEndDate());
+        newExperience.setStartDate(startDate);
+        newExperience.setEndDate(endDate);
         newExperience.setCv(cv);
         return experienceRepository.save(newExperience);
     }
