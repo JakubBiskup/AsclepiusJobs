@@ -1,11 +1,9 @@
 package com.example.asclepiusjobs.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,8 +15,9 @@ public class Skill {
     @NotEmpty
     private String name;
 
-    @ManyToMany(mappedBy = "skills")
-    private Set<Cv> cvs;
+    @OneToMany(mappedBy = "skill")              //relation with SkillOrderOnCv
+    private List<SkillOrderOnCv> skillCv;
+
 
     @ManyToMany(mappedBy = "skillsRequired")
     private Set<JobOffer> jobOffers;
@@ -39,19 +38,19 @@ public class Skill {
         this.name = name;
     }
 
-    public Set<Cv> getCvs() {
-        return cvs;
-    }
-
-    public void setCvs(Set<Cv> cvs) {
-        this.cvs = cvs;
-    }
-
     public Set<JobOffer> getJobOffers() {
         return jobOffers;
     }
 
     public void setJobOffers(Set<JobOffer> jobOffers) {
         this.jobOffers = jobOffers;
+    }
+
+    public List<SkillOrderOnCv> getSkillCv() {
+        return skillCv;
+    }
+
+    public void setSkillCv(List<SkillOrderOnCv> skillCv) {
+        this.skillCv = skillCv;
     }
 }

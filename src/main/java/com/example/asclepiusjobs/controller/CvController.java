@@ -14,7 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -66,24 +67,57 @@ public class CvController {
         return ResponseEntity.ok("Education added to your CV");
     }
 
-    @PostMapping(value = "/skill/add")
-    ResponseEntity addSkillToMyCv(@RequestBody String nameOfSkill){
-        Skill skill= skillService.getByNameOrReturnNull(nameOfSkill);
-        if(skill==null){
-            skill=skillService.createSkill(nameOfSkill);
-        }
-        cvService.addSkillToCv(getMyCv(),skill);
-        return ResponseEntity.ok("Skill ("+skill.getName()+") added to your CV.");
-    }
-
-    @DeleteMapping(value = "/skill/{id}")
-    ResponseEntity removeSkillFromMyCv(@PathVariable Long id) throws Exception {
+    @PatchMapping(value = "/skill/update")
+    ResponseEntity updateSkillsAndTheirOrder(@RequestBody List<String> skillsInOrder){
         Cv myCv=getMyCv();
-        Set<Skill> skillSet=myCv.getSkills();
-        skillSet.remove(skillService.getById(id));
-        myCv.setSkills(skillSet);
-        cvService.saveOrUpdate(myCv);
-        return ResponseEntity.ok("Skill removed from your CV");
+        skillService.clearSkillsAndTheirOrderOnCv(myCv);
+        List<Skill> skillsList=new ArrayList<>();
+        for(String nameOfSkill:skillsInOrder){
+            Skill skill= skillService.getByNameOrReturnNull(nameOfSkill);
+            if(skill==null){
+                skill=skillService.createSkill(nameOfSkill);
+            }
+            skillsList.add(skill);
+        }
+        cvService.updateSkillsAndTheirOrder(myCv,skillsList);
+
+
+        //code below is for confirming the right order of skills, remove/replace later
+
+        List<Skill> returnedSkillsList=skillService.getSkillsInOrderOnCv(myCv);
+
+        int returnedListSize= returnedSkillsList.size();
+        switch (returnedListSize){
+            case 0:
+                return ResponseEntity.ok("You have not entered any skills.");
+            case 1:
+                return ResponseEntity.ok("Your only skill is: " +returnedSkillsList.get(0).getName());
+            case 2:
+                return ResponseEntity.ok("Both of your skills will be visible in listing results ("
+                        +returnedSkillsList.get(0).getName()
+                        +" and "
+                        +returnedSkillsList.get(1).getName()
+                        +").");
+        }
+
+        StringBuilder returnedStringBuilder= new StringBuilder("These skills will be shown in listing results: ");
+        returnedStringBuilder.append(returnedSkillsList.get(0).getName());
+        returnedStringBuilder.append(",");
+        returnedStringBuilder.append(returnedSkillsList.get(1).getName());
+        returnedStringBuilder.append(" and ");
+        returnedStringBuilder.append(returnedSkillsList.get(2).getName());
+        if(returnedListSize>3) {
+            returnedStringBuilder.append(". These will be visible only after opening your CV: ");
+            for (int i = 3; i < returnedListSize; i++) {
+                returnedStringBuilder.append(" - ").append(returnedSkillsList.get(i).getName());
+            }
+        }
+        return ResponseEntity.ok(returnedStringBuilder.toString());
+
+        //
+
+
+
     }
 
     @DeleteMapping(value = "/education/{id}")
@@ -111,7 +145,7 @@ public class CvController {
     @DeleteMapping(value = "/experience/{id}")
     ResponseEntity deleteMyExperience(@PathVariable Long id) throws Exception {
         Cv myCv=getMyCv();
-        if(experienceService.getById(id).getCv().getId().equals(myCv)){
+        if(experienceService.getById(id).getCv().equals(myCv)){
             experienceService.deleteById(id);
             return ResponseEntity.ok("Experience deleted.");
         }else {

@@ -2,6 +2,7 @@ package com.example.asclepiusjobs.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,13 +24,8 @@ public class Cv {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "cv_skill",
-            joinColumns = @JoinColumn(name = "cv_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
-    private Set<Skill> skills;
+    @OneToMany(mappedBy = "cv")
+    private List<SkillOrderOnCv> skills;
 
     @OneToMany(mappedBy = "cv")
     private Set<Language> languages;
@@ -95,7 +91,7 @@ public class Cv {
     public void setUser(User user) {
         this.user = user;
     }
-
+/*
     public Set<Skill> getSkills() {
         return skills;
     }
@@ -104,6 +100,8 @@ public class Cv {
         this.skills = skills;
     }
 
+
+ */
     public Set<Language> getLanguages() {
         return languages;
     }
@@ -126,5 +124,13 @@ public class Cv {
 
     public void setEducationSet(Set<Education> educationSet) {
         this.educationSet = educationSet;
+    }
+
+    public List<SkillOrderOnCv> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<SkillOrderOnCv> skills) {
+        this.skills = skills;
     }
 }
