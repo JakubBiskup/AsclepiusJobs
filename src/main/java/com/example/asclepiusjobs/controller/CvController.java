@@ -38,11 +38,11 @@ public class CvController {
 
 
     @PatchMapping(value = "cv/change-visibility")
-    ResponseEntity changeMyCvVisibility(@RequestBody boolean makeVisible) throws Exception {
+    public ResponseEntity changeMyCvVisibility(@RequestBody boolean makeVisible) {
         Cv myCv=getMyCv();
         myCv.setVisibility(makeVisible);
         cvService.saveOrUpdate(myCv);
-        if (makeVisible==true) {
+        if (makeVisible) {
             return ResponseEntity.ok("Your CV is now visible to other users.");
         }else {
             return ResponseEntity.ok("Your CV is now invisible to other users.");
@@ -50,34 +50,34 @@ public class CvController {
     }
 
     @PatchMapping(value = "/update-basic-cv-elements")
-    ResponseEntity updateBasicsOnCv(@RequestBody CvDto cvDto) throws Exception {
+    public ResponseEntity updateBasicsOnCv(@RequestBody CvDto cvDto) throws Exception {
         cvService.updateBasics(getAuthenticatedUser().getId(),cvDto);
         return ResponseEntity.ok("Cv updated.");
     }
 
     @PostMapping(value = "/experience/add")
-    ResponseEntity addExperienceToMyCv(@Valid @RequestBody ExperienceDto experienceDto) throws Exception {
+    public ResponseEntity addExperienceToMyCv(@Valid @RequestBody ExperienceDto experienceDto) throws Exception {
         Cv cv= getMyCv();
         experienceService.createExperience(experienceDto,cv);
         return ResponseEntity.ok("Experience added to your CV.");
     }
 
     @PostMapping(value = "/language/add")
-    ResponseEntity addLanguageToMyCv(@Valid @RequestBody LanguageDto languageDto){
+    public ResponseEntity addLanguageToMyCv(@Valid @RequestBody LanguageDto languageDto){
         Cv myCv= getMyCv();
         languageService.createLanguage(myCv,languageDto);
         return ResponseEntity.ok("Language added to your CV.");
     }
 
     @PostMapping(value = "/education/add")
-    ResponseEntity addEducationToMyCv(@Valid @RequestBody EducationDto educationDto) throws Exception {
+    public ResponseEntity addEducationToMyCv(@Valid @RequestBody EducationDto educationDto) throws Exception {
         Cv myCv= getMyCv();
         educationService.createEducation(myCv,educationDto);
         return ResponseEntity.ok("Education added to your CV");
     }
 
     @PatchMapping(value = "/skill/update")
-    ResponseEntity updateSkillsAndTheirOrder(@RequestBody List<String> skillsInOrder){
+    public ResponseEntity updateSkillsAndTheirOrder(@RequestBody List<String> skillsInOrder){
         Cv myCv=getMyCv();
         skillService.clearSkillsAndTheirOrderOnCv(myCv);
         List<Skill> skillsList=new ArrayList<>();
@@ -107,6 +107,8 @@ public class CvController {
                         +" and "
                         +returnedSkillsList.get(1).getName()
                         +").");
+            default:
+                break;
         }
 
         StringBuilder returnedStringBuilder= new StringBuilder("These skills will be shown in listing results: ");
@@ -130,7 +132,7 @@ public class CvController {
     }
 
     @DeleteMapping(value = "/education/{id}")
-    ResponseEntity deleteMyEducation(@PathVariable Long id) throws Exception {
+    public ResponseEntity deleteMyEducation(@PathVariable Long id) throws Exception {
         Cv myCv=getMyCv();
         if (educationService.getById(id).getCv().equals(myCv)){
             educationService.deleteById(id);
@@ -141,7 +143,7 @@ public class CvController {
     }
 
     @DeleteMapping(value = "/language/{id}")
-    ResponseEntity deleteMyLanguage(@PathVariable Long id) throws Exception {
+    public ResponseEntity deleteMyLanguage(@PathVariable Long id) throws Exception {
         Cv myCv=getMyCv();
         if(languageService.getById(id).getCv().equals(myCv)){
             languageService.deleteById(id);
@@ -152,7 +154,7 @@ public class CvController {
     }
 
     @DeleteMapping(value = "/experience/{id}")
-    ResponseEntity deleteMyExperience(@PathVariable Long id) throws Exception {
+    public ResponseEntity deleteMyExperience(@PathVariable Long id) throws Exception {
         Cv myCv=getMyCv();
         if(experienceService.getById(id).getCv().equals(myCv)){
             experienceService.deleteById(id);
@@ -163,7 +165,7 @@ public class CvController {
     }
 
     @PutMapping(value = "/cv/update")
-    ResponseEntity replaceMyWholeCv(@Valid @RequestBody CompleteCvDto completeCvDto) throws Exception {
+    public ResponseEntity replaceMyWholeCv(@Valid @RequestBody CompleteCvDto completeCvDto) throws Exception {
 
         Cv myCv=clearCv(getMyCv());
 

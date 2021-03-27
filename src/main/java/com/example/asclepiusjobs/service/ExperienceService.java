@@ -23,10 +23,8 @@ public class ExperienceService {
     public Experience createExperience(ExperienceDto experienceDto, Cv cv) throws Exception {
         Date startDate=experienceDto.getStartDate();
         Date endDate=experienceDto.getEndDate();
-        if(endDate!=null) {
-            if (endDate.before(startDate)) {
-                throw new Exception("Start date must be before end date.");
-            }
+        if(endDate!=null&&endDate.before(startDate)) {
+            throw new Exception("Start date must be before end date.");
         }
         Experience newExperience=new Experience();
         Location newLocation=locationService.createLocationFromLocationDto(experienceDto.getLocationDto());

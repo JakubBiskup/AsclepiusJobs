@@ -11,11 +11,7 @@ public class NewPasswordDto {
     private String confirmedPassword;
 
     public boolean areMatching(){
-        if(this.password.equals(this.confirmedPassword)){
-            return true;
-        }else {
-            return false;
-        }
+        return this.password.equals(this.confirmedPassword);
     }
 
     public String getPassword() {

@@ -23,10 +23,8 @@ public class EducationService {
     public Education createEducation(Cv cv, EducationDto educationDto) throws Exception {
         Date startDate=educationDto.getStartDate();
         Date endDate=educationDto.getEndDate();
-        if(endDate!=null){
-            if(endDate.before(startDate)){
-                throw new Exception("Start date must be before end date.");
-            }
+        if(endDate!=null&&endDate.before(startDate)){
+            throw new Exception("Start date must be before end date.");
         }
         Education newEducation=new Education();
 
