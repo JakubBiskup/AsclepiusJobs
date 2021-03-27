@@ -91,17 +91,7 @@ public class Cv {
     public void setUser(User user) {
         this.user = user;
     }
-/*
-    public Set<Skill> getSkills() {
-        return skills;
-    }
 
-    public void setSkills(Set<Skill> skills) {
-        this.skills = skills;
-    }
-
-
- */
     public Set<Language> getLanguages() {
         return languages;
     }

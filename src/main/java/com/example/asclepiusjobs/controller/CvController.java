@@ -1,12 +1,7 @@
 package com.example.asclepiusjobs.controller;
 
-import com.example.asclepiusjobs.dto.CvDto;
-import com.example.asclepiusjobs.dto.EducationDto;
-import com.example.asclepiusjobs.dto.ExperienceDto;
-import com.example.asclepiusjobs.dto.LanguageDto;
-import com.example.asclepiusjobs.model.Cv;
-import com.example.asclepiusjobs.model.Skill;
-import com.example.asclepiusjobs.model.User;
+import com.example.asclepiusjobs.dto.*;
+import com.example.asclepiusjobs.model.*;
 import com.example.asclepiusjobs.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -153,6 +150,38 @@ public class CvController {
         }
     }
 
+    @PutMapping(value = "/cv/update")
+    ResponseEntity replaceMyWholeCv(@Valid @RequestBody CompleteCvDto completeCvDto) throws Exception {
+
+        Cv myCv=clearCv(getMyCv());
+
+        cvService.updateBasics(myCv.getId(),completeCvDto.getBasicCvFields());
+
+        List<String> skillsInOrder=completeCvDto.getSkillNamesList();
+        List<Skill> skillsList=new ArrayList<>();
+        for(String nameOfSkill:skillsInOrder){
+            Skill skill= skillService.getByNameOrReturnNull(nameOfSkill);
+            if(skill==null){
+                skill=skillService.createSkill(nameOfSkill);
+            }
+            skillsList.add(skill);
+        }
+        cvService.updateSkillsAndTheirOrder(myCv,skillsList);
+
+        for(LanguageDto languageDto:completeCvDto.getLanguageList()){
+            languageService.createLanguage(myCv,languageDto);
+        }
+
+        for (EducationDto educationDto:completeCvDto.getEducationList()){
+            educationService.createEducation(myCv,educationDto);
+        }
+        for (ExperienceDto experienceDto:completeCvDto.getExperienceList()){
+            experienceService.createExperience(experienceDto,myCv);
+        }
+        cvService.saveOrUpdate(myCv);
+        return ResponseEntity.ok("Your CV was updated.");
+    }
+
     private Cv getMyCv(){
         return getAuthenticatedUser().getCv();
     }
@@ -160,6 +189,35 @@ public class CvController {
     private User getAuthenticatedUser(){
         String loggedInUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         return userService.getUserByEmail(loggedInUserEmail);
+    }
+
+    private Cv clearCv(Cv cv) throws Exception {
+
+        Set emptySet=new HashSet();
+
+        Set<Experience> experienceSet=cv.getExperienceSet();
+        for(Experience experience:experienceSet){
+            experienceService.deleteById(experience.getId());
+        }
+        cv.setExperienceSet(emptySet);
+
+        Set<Education> educationSet=cv.getEducationSet();
+        for(Education education:educationSet){
+            educationService.delete(education);
+        }
+        cv.setEducationSet(emptySet);
+        Set<Language> languageSet=cv.getLanguages();
+        for(Language language:languageSet){
+            languageService.deleteById(language.getId());
+        }
+        cv.setLanguages(emptySet);
+        skillService.clearSkillsAndTheirOrderOnCv(cv);
+        CvDto startCv=new CvDto();
+        startCv.setAvailable(false);
+        startCv.setTitle(null);
+        startCv.setInterests(null);
+        return cvService.updateBasics(cv.getId(),startCv);
+
     }
 
 
