@@ -37,6 +37,18 @@ public class CvController {
     private SkillService skillService;
 
 
+    @PatchMapping(value = "cv/change-visibility")
+    ResponseEntity changeMyCvVisibility(@RequestBody boolean makeVisible) throws Exception {
+        Cv myCv=getMyCv();
+        myCv.setVisibility(makeVisible);
+        cvService.saveOrUpdate(myCv);
+        if (makeVisible==true) {
+            return ResponseEntity.ok("Your CV is now visible to other users.");
+        }else {
+            return ResponseEntity.ok("Your CV is now invisible to other users.");
+        }
+    }
+
     @PatchMapping(value = "/update-basic-cv-elements")
     ResponseEntity updateBasicsOnCv(@RequestBody CvDto cvDto) throws Exception {
         cvService.updateBasics(getAuthenticatedUser().getId(),cvDto);

@@ -38,12 +38,6 @@ public class CvService {
         return savedCv;
     }
 
-    public Cv makeCvVisible(Long id) throws Exception {
-        Cv cv=getCvById(id);
-        cv.setVisibility(true);
-        return saveOrUpdate(cv);
-    }
-
     public Cv updateBasics(Long id, CvDto cvDto) throws Exception {
         Cv cv=getCvById(id);
         cv.setAvailable(cvDto.isAvailable());
