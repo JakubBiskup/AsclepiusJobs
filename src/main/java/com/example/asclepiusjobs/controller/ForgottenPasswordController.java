@@ -30,18 +30,12 @@ public class ForgottenPasswordController {
     PasswordResetTokenService passwordResetTokenService;
 
     @PostMapping(value = "/forgotten-password")
-    public ResponseEntity sendPasswordResetMail(@RequestBody String email) throws Exception {
+    public ResponseEntity sendPasswordResetMail(@RequestBody String email) {
         try {
             User user = userService.getUserByEmail(email);
             emailService.sendPasswordResetLink(user, passwordResetTokenService.generatePasswordResetToken(user).getToken());
             return ResponseEntity.ok("Password reset link sent (if there is an account with that email). Check your mailbox.");
         }catch (UsernameNotFoundException exception){
-            try{
-                TimeUnit.SECONDS.sleep(3); // sleep for 3 seconds to simulate work that would have to be done if the email was found
-            }catch (InterruptedException ie){
-                System.out.println("Sleep interrupted... "+ ie.getMessage());
-                throw ie;                                                                       //
-            }
             return  ResponseEntity.ok("Password reset link sent (if there is an account with that email). Check your mailbox.");
         }
     }

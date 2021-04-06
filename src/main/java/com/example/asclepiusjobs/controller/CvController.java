@@ -89,46 +89,7 @@ public class CvController {
             skillsList.add(skill);
         }
         cvService.updateSkillsAndTheirOrder(myCv,skillsList);
-
-
-        //code below is for confirming the right order of skills, remove/replace later
-
-        List<Skill> returnedSkillsList=skillService.getSkillsInOrderOnCv(myCv);
-
-        int returnedListSize= returnedSkillsList.size();
-        switch (returnedListSize){
-            case 0:
-                return ResponseEntity.ok("You have not entered any skills.");
-            case 1:
-                return ResponseEntity.ok("Your only skill is: " +returnedSkillsList.get(0).getName());
-            case 2:
-                return ResponseEntity.ok("Both of your skills will be visible in listing results ("
-                        +returnedSkillsList.get(0).getName()
-                        +" and "
-                        +returnedSkillsList.get(1).getName()
-                        +").");
-            default:
-                break;
-        }
-
-        StringBuilder returnedStringBuilder= new StringBuilder("These skills will be shown in listing results: ");
-        returnedStringBuilder.append(returnedSkillsList.get(0).getName());
-        returnedStringBuilder.append(",");
-        returnedStringBuilder.append(returnedSkillsList.get(1).getName());
-        returnedStringBuilder.append(" and ");
-        returnedStringBuilder.append(returnedSkillsList.get(2).getName());
-        if(returnedListSize>3) {
-            returnedStringBuilder.append(". These will be visible only after opening your CV: ");
-            for (int i = 3; i < returnedListSize; i++) {
-                returnedStringBuilder.append(" - ").append(returnedSkillsList.get(i).getName());
-            }
-        }
-        return ResponseEntity.ok(returnedStringBuilder.toString());
-
-        //
-
-
-
+        return ResponseEntity.ok("Skills updated.");
     }
 
     @DeleteMapping(value = "/education/{id}")
