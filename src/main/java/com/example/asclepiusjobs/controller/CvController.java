@@ -36,6 +36,12 @@ public class CvController {
     @Autowired
     private SkillService skillService;
 
+    @GetMapping(value = "cv/my-cv")
+    public CompleteCvDto describeMyCv(){
+        Cv myCv=getMyCv();
+        return cvService.getCompleteDtoOfCv(myCv);
+
+    }
 
     @PatchMapping(value = "cv/change-visibility")
     public ResponseEntity changeMyCvVisibility(@RequestBody boolean makeVisible) {

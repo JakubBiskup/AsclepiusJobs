@@ -15,6 +15,13 @@ public class LanguageService {
     @Autowired
     private LanguageRepository languageRepository;
 
+    public LanguageDto convertLanguageEntityToDto(Language languageEntity){
+        LanguageDto languageDto=new LanguageDto();
+        languageDto.setName(languageEntity.getName());
+        languageDto.setLevel(languageEntity.getLevel());
+        return languageDto;
+    }
+
     public Language createLanguage(Cv cv, LanguageDto languageDto){
         Language language=new Language();
         language.setCv(cv);

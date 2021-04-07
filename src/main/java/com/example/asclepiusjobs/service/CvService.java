@@ -1,10 +1,7 @@
 package com.example.asclepiusjobs.service;
 
-import com.example.asclepiusjobs.dto.CvDto;
-import com.example.asclepiusjobs.model.Cv;
-import com.example.asclepiusjobs.model.Skill;
-import com.example.asclepiusjobs.model.SkillOrderOnCv;
-import com.example.asclepiusjobs.model.User;
+import com.example.asclepiusjobs.dto.*;
+import com.example.asclepiusjobs.model.*;
 import com.example.asclepiusjobs.repository.CvRepository;
 import com.example.asclepiusjobs.repository.SkillOrderOnCvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CvService {
@@ -26,7 +24,63 @@ public class CvService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SkillService skillService;
 
+    @Autowired
+    private EducationService educationService;
+
+    @Autowired
+    private ExperienceService experienceService;
+
+    @Autowired
+    private LanguageService languageService;
+
+
+    public CompleteCvDto getCompleteDtoOfCv(Cv cv){
+        CompleteCvDto completeCvDto=new CompleteCvDto();
+
+        CvDto basicCvFieldsDto=new CvDto();
+        basicCvFieldsDto.setInterests(cv.getInterests());
+        basicCvFieldsDto.setTitle(cv.getTitle());
+        basicCvFieldsDto.setAvailable(cv.isAvailable());
+        completeCvDto.setBasicCvFields(basicCvFieldsDto);
+
+        Set<Education> educationSet=cv.getEducationSet();
+        List<EducationDto> educationDtoList=new ArrayList<>();
+        for(Education education:educationSet){
+            EducationDto educationDto= educationService.convertEducationEntityToDto(education);
+            educationDtoList.add(educationDto);
+        }
+        completeCvDto.setEducationList(educationDtoList);
+
+        Set<Language> languageSet=cv.getLanguages();
+        List<LanguageDto> languageDtoList=new ArrayList<>();
+        for(Language language:languageSet){
+            LanguageDto languageDto=languageService.convertLanguageEntityToDto(language);
+            languageDtoList.add(languageDto);
+        }
+        completeCvDto.setLanguageList(languageDtoList);
+
+        Set<Experience> experienceSet=cv.getExperienceSet();
+        List<ExperienceDto> experienceDtoList=new ArrayList<>();
+        for (Experience experience:experienceSet){
+            ExperienceDto experienceDto=experienceService.convertExperienceEntityToDto(experience);
+            experienceDtoList.add(experienceDto);
+        }
+        completeCvDto.setExperienceList(experienceDtoList);
+
+
+        List<Skill> skillsList=skillService.getSkillsInOrderOnCv(cv);
+        List<String> skillNamesList=new ArrayList<>();
+        for(Skill skill:skillsList){
+            skillNamesList.add(skill.getName());
+        }
+        completeCvDto.setSkillNamesList(skillNamesList);
+
+
+        return completeCvDto;
+    }
 
     public Cv createBlankInvisibleCv(User user){
         Cv cv=new Cv();

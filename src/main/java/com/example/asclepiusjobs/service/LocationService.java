@@ -14,6 +14,17 @@ public class LocationService {
     @Autowired
     private LocationRepository locationRepository;
 
+    public LocationDto convertLocationEntityToDto(Location locationEntity){
+        LocationDto locationDto=new LocationDto();
+        locationDto.setCountry(locationEntity.getCountry());
+        locationDto.setCity(locationEntity.getCity());
+        locationDto.setPostalCode(locationEntity.getPostalCode());
+        locationDto.setStreet(locationEntity.getStreet());
+        locationDto.setHouse(locationEntity.getHouse());
+        locationDto.setApartment(locationEntity.getApartment());
+        return locationDto;
+    }
+
     public Location createLocationFromLocationDto(LocationDto dtoLocation){
         Location location= new Location();
         location.setCountry(dtoLocation.getCountry());

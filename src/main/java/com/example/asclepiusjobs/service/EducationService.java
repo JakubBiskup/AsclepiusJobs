@@ -1,6 +1,7 @@
 package com.example.asclepiusjobs.service;
 
 import com.example.asclepiusjobs.dto.EducationDto;
+import com.example.asclepiusjobs.dto.LocationDto;
 import com.example.asclepiusjobs.model.Cv;
 import com.example.asclepiusjobs.model.Education;
 import com.example.asclepiusjobs.model.Location;
@@ -19,6 +20,20 @@ public class EducationService {
 
     @Autowired
     private LocationService locationService;
+
+    public EducationDto convertEducationEntityToDto(Education educationEntity){
+        EducationDto educationDto=new EducationDto();
+        educationDto.setDiplomaTitle(educationEntity.getDiplomaTitle());
+        educationDto.setEducationalLevel(educationEntity.getEducationalLevel());
+        educationDto.setOrganization(educationEntity.getOrganization());
+        educationDto.setStartDate(educationEntity.getStartDate());
+        educationDto.setEndDate(educationEntity.getEndDate());
+
+        LocationDto organizationLocationDto=locationService.convertLocationEntityToDto(educationEntity.getLocation());
+        educationDto.setLocationDto(organizationLocationDto);
+
+        return educationDto;
+    }
 
     public Education createEducation(Cv cv, EducationDto educationDto) throws Exception {
         Date startDate=educationDto.getStartDate();

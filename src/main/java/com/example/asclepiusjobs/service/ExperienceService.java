@@ -1,6 +1,7 @@
 package com.example.asclepiusjobs.service;
 
 import com.example.asclepiusjobs.dto.ExperienceDto;
+import com.example.asclepiusjobs.dto.LocationDto;
 import com.example.asclepiusjobs.model.Cv;
 import com.example.asclepiusjobs.model.Experience;
 import com.example.asclepiusjobs.model.Location;
@@ -19,6 +20,20 @@ public class ExperienceService {
 
     @Autowired
     private LocationService locationService;
+
+    public ExperienceDto convertExperienceEntityToDto(Experience experienceEntity){
+        ExperienceDto experienceDto=new ExperienceDto();
+        experienceDto.setCompanyName(experienceEntity.getCompanyName());
+        experienceDto.setDescription(experienceEntity.getDescription());
+        experienceDto.setPositionTitle(experienceEntity.getPositionTitle());
+        experienceDto.setStartDate(experienceEntity.getStartDate());
+        experienceDto.setEndDate(experienceEntity.getEndDate());
+
+        LocationDto experienceLocationDto= locationService.convertLocationEntityToDto(experienceEntity.getLocation());
+        experienceDto.setLocationDto(experienceLocationDto);
+
+        return experienceDto;
+    }
 
     public Experience createExperience(ExperienceDto experienceDto, Cv cv) throws Exception {
         Date startDate=experienceDto.getStartDate();
