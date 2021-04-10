@@ -36,6 +36,9 @@ public class JobOfferService {
 
         List<Predicate> predicatesList=new ArrayList<>();
 
+        Predicate visiblePredicate=criteriaBuilder.equal(jobOfferRoot.get("visibility"),true);
+        predicatesList.add(visiblePredicate);
+
         String countryName= criteriaDto.getCountry();
         if(countryName!=null){
             Predicate countryPredicate=criteriaBuilder.like(jobOfferRoot.get("location").get("country"),"%"+countryName+"%");
@@ -90,6 +93,15 @@ public class JobOfferService {
 
 
         criteriaQuery.where(predicatesList.toArray(new Predicate[]{}));
+
+        Boolean olderFirst=criteriaDto.getShowOlderFirst();
+        if(olderFirst!=null && olderFirst){
+            criteriaQuery.orderBy(criteriaBuilder.asc(jobOfferRoot.get("createTime")));
+        }else{
+            criteriaQuery.orderBy(criteriaBuilder.desc(jobOfferRoot.get("createTime")));
+        }
+
+
         TypedQuery<JobOffer> query=entityManager.createQuery(criteriaQuery);
         return query.getResultList();
 

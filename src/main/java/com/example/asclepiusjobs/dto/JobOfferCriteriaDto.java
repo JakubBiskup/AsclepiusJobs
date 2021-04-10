@@ -13,6 +13,9 @@ public class JobOfferCriteriaDto {
     private Integer minSalary;
     private Integer maxSalary;
     private String healthEstablishmentName;
+    private Boolean showOlderFirst;
+
+
 
     public String getCountry() {
         return country;
@@ -92,5 +95,13 @@ public class JobOfferCriteriaDto {
 
     public void setHealthEstablishmentName(String healthEstablishmentName) {
         this.healthEstablishmentName = healthEstablishmentName;
+    }
+
+    public Boolean getShowOlderFirst() {
+        return showOlderFirst;
+    }
+
+    public void setShowOlderFirst(Boolean showOlderFirst) {
+        this.showOlderFirst = showOlderFirst;
     }
 }
