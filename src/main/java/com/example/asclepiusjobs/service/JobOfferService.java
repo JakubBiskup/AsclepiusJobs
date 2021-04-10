@@ -1,7 +1,11 @@
 package com.example.asclepiusjobs.service;
 
 import com.example.asclepiusjobs.dto.JobOfferCriteriaDto;
+import com.example.asclepiusjobs.dto.JobOfferResultDto;
+import com.example.asclepiusjobs.dto.LocationDto;
+import com.example.asclepiusjobs.dto.SearchResultJobOffersDto;
 import com.example.asclepiusjobs.model.JobOffer;
+import com.example.asclepiusjobs.model.Skill;
 import com.example.asclepiusjobs.model.enums.Profession;
 import com.example.asclepiusjobs.repository.JobOfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +26,54 @@ public class JobOfferService {
     @Autowired
     private JobOfferRepository jobOfferRepository;
 
+    @Autowired
+    private LocationService locationService;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     public List<JobOffer> getAllJobOffers(){
         return jobOfferRepository.findAll();
+    }
+
+    public SearchResultJobOffersDto getSearchResultJobOffers(JobOfferCriteriaDto criteriaDto){
+        List<JobOffer> jobOffers=findJobOffersWithCriteria(criteriaDto);
+        List<JobOfferResultDto> jobOfferResults=new ArrayList<>();
+        for(JobOffer jobOffer:jobOffers){
+            jobOfferResults.add(convertJobOfferEntityToResultDto(jobOffer));
+        }
+        SearchResultJobOffersDto finalResult=new SearchResultJobOffersDto();
+        finalResult.setResults(jobOfferResults);
+        finalResult.setResultsCount(jobOfferResults.size());
+        return finalResult;
+    }
+
+    public JobOfferResultDto convertJobOfferEntityToResultDto(JobOffer entity){
+        JobOfferResultDto resultDto=new JobOfferResultDto();
+        resultDto.setId(entity.getId());
+        resultDto.setTitle(entity.getTitle());
+        resultDto.setMissionStartDate(entity.getMissionStartDate());
+        resultDto.setProfession(entity.getProfession());
+        resultDto.setDurationInMonths(entity.getDuration());
+        resultDto.setMonthlySalary(entity.getSalary());
+        resultDto.setMission(entity.getMission());
+        resultDto.setDescription(entity.getDescription());
+        resultDto.setYearsOfExperienceRequired(entity.getExperienceRequired());
+        resultDto.setContactEmail(entity.getEmail());
+        resultDto.setCreateTime(entity.getCreateTime());
+
+        LocationDto locationDto= locationService.convertLocationEntityToDto(entity.getLocation());
+        resultDto.setLocation(locationDto);
+
+        Set<Skill> skillSet=entity.getSkillsRequired();
+        List<String> skillNamesList=new ArrayList<>();
+        for(Skill skill:skillSet){
+            skillNamesList.add(skill.getName());
+        }
+        resultDto.setSkillsRequired(skillNamesList);
+
+        return resultDto;
+
     }
 
     public List<JobOffer> findJobOffersWithCriteria(JobOfferCriteriaDto criteriaDto){
