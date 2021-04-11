@@ -45,10 +45,13 @@ public class JobOfferService {
         favouriteJobOffers.add(jobOffer);
         user.setFavouriteJobOffers(favouriteJobOffers);
         userService.saveOrUpdate(user);
-        Set<User> userSet=jobOffer.getUsersFav();
-        userSet.add(user);
-        jobOffer.setUsersFav(userSet);
-        saveOrUpdate(jobOffer);
+    }
+
+    public void removeJobOfferFromUserFavorites(JobOffer jobOffer,User user){
+        Set<JobOffer> favouriteJobOffers=user.getFavouriteJobOffers();
+        favouriteJobOffers.remove(jobOffer);
+        user.setFavouriteJobOffers(favouriteJobOffers);
+        userService.saveOrUpdate(user);
     }
 
     public JobOffer getJobOfferById(Long id) throws Exception {

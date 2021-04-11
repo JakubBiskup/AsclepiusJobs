@@ -44,11 +44,17 @@ public class JobOfferController {
         return finalResult;
     }
 
-    @PostMapping(value = "/job-offer/{id}/mark-as-fav")
+    @PostMapping(value = "/job-offer/{id}/add-fav")
     public ResponseEntity addToUserFav(@PathVariable Long id) throws Exception {
         jobOfferService.markJobOfferAsUserFavourite(jobOfferService.getJobOfferById(id),getAuthenticatedUser());
-        return ResponseEntity.ok("Job offer added to favorites");
+        return ResponseEntity.ok("Job offer added to your favorites");
 
+    }
+
+    @DeleteMapping(value = "/job-offer/{id}/remove-fav")
+    public ResponseEntity removeFromUserFav(@PathVariable Long id) throws Exception {
+        jobOfferService.removeJobOfferFromUserFavorites(jobOfferService.getJobOfferById(id),getAuthenticatedUser());
+        return ResponseEntity.ok("Job offer removed from your favorites");
     }
 
     private User getAuthenticatedUser(){
