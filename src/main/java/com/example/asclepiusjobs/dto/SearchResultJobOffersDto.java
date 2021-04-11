@@ -4,6 +4,7 @@ import java.util.List;
 
 public class SearchResultJobOffersDto {
     private int resultsCount;
+    private Integer page;
     private List<JobOfferResultDto> results;
 
     public int getResultsCount() {
@@ -20,5 +21,13 @@ public class SearchResultJobOffersDto {
 
     public void setResults(List<JobOfferResultDto> results) {
         this.results = results;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
     }
 }

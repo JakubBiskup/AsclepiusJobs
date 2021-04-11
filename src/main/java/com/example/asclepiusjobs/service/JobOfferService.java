@@ -1,9 +1,6 @@
 package com.example.asclepiusjobs.service;
 
-import com.example.asclepiusjobs.dto.JobOfferCriteriaDto;
-import com.example.asclepiusjobs.dto.JobOfferResultDto;
-import com.example.asclepiusjobs.dto.LocationDto;
-import com.example.asclepiusjobs.dto.SearchResultJobOffersDto;
+import com.example.asclepiusjobs.dto.*;
 import com.example.asclepiusjobs.model.JobOffer;
 import com.example.asclepiusjobs.model.Skill;
 import com.example.asclepiusjobs.model.User;
@@ -65,13 +62,32 @@ public class JobOfferService {
 
     public SearchResultJobOffersDto getSearchResultJobOffers(JobOfferCriteriaDto criteriaDto){
         List<JobOffer> jobOffers=findJobOffersWithCriteria(criteriaDto);
-        List<JobOfferResultDto> jobOfferResults=new ArrayList<>();
-        for(JobOffer jobOffer:jobOffers){
-            jobOfferResults.add(convertJobOfferEntityToResultDto(jobOffer));
-        }
         SearchResultJobOffersDto finalResult=new SearchResultJobOffersDto();
+        int count =jobOffers.size();
+        finalResult.setResultsCount(count);
+
+        List<JobOfferResultDto> jobOfferResults=new ArrayList<>();
+
+        Pagination pagination=criteriaDto.getPagination();
+        if(pagination!=null){
+            Integer page=pagination.getPageNumber();
+            finalResult.setPage(page);
+            int offersPerPage=pagination.getItemsPerPage();
+            int startOfPage=page-1;
+            startOfPage*=offersPerPage;
+            int endOfPage=startOfPage+offersPerPage;
+            for(int offerNumber=startOfPage;offerNumber<endOfPage&&offerNumber<count;offerNumber++){
+                jobOfferResults.add(convertJobOfferEntityToResultDto(jobOffers.get(offerNumber)));
+            }
+        }else{
+            for(JobOffer jobOffer:jobOffers){
+                jobOfferResults.add(convertJobOfferEntityToResultDto(jobOffer));
+            }
+
+        }
+
         finalResult.setResults(jobOfferResults);
-        finalResult.setResultsCount(jobOfferResults.size());
+
         return finalResult;
     }
 

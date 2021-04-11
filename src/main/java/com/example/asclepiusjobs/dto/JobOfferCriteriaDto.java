@@ -14,6 +14,7 @@ public class JobOfferCriteriaDto {
     private Integer maxSalary;
     private String healthEstablishmentName;
     private Boolean showOlderFirst;
+    private Pagination pagination;
 
 
 
@@ -103,5 +104,13 @@ public class JobOfferCriteriaDto {
 
     public void setShowOlderFirst(Boolean showOlderFirst) {
         this.showOlderFirst = showOlderFirst;
+    }
+
+    public Pagination getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(Pagination pagination) {
+        this.pagination = pagination;
     }
 }
