@@ -80,6 +80,9 @@ public class JobOffer {
     @OneToMany(mappedBy = "jobOffer")
     private Set<JobApplication> jobApplications;
 
+    @ManyToMany(mappedBy = "favouriteJobOffers")
+    private Set<User> usersFav;
+
 
     public Long getId() {
         return id;
@@ -231,5 +234,13 @@ public class JobOffer {
 
     public void setSkillsRequired(Set<Skill> skillsRequired) {
         this.skillsRequired = skillsRequired;
+    }
+
+    public Set<User> getUsersFav() {
+        return usersFav;
+    }
+
+    public void setUsersFav(Set<User> usersFav) {
+        this.usersFav = usersFav;
     }
 }

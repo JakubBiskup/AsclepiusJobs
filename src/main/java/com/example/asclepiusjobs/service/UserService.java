@@ -72,7 +72,6 @@ public class UserService {
         if(emailExists(email)){
             return userRepository.findByEmail(email).get();
         }else{
-            System.out.println("no user found with email: "+email);  // helpful sout, delete later
             throw new UsernameNotFoundException("Something went wrong"); //not giving away the fact that the email does not exist in the database
         }
     }

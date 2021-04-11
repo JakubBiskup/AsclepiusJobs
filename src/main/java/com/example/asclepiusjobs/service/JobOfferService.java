@@ -6,6 +6,7 @@ import com.example.asclepiusjobs.dto.LocationDto;
 import com.example.asclepiusjobs.dto.SearchResultJobOffersDto;
 import com.example.asclepiusjobs.model.JobOffer;
 import com.example.asclepiusjobs.model.Skill;
+import com.example.asclepiusjobs.model.User;
 import com.example.asclepiusjobs.model.enums.Profession;
 import com.example.asclepiusjobs.repository.JobOfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,34 @@ public class JobOfferService {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private UserService userService;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     public List<JobOffer> getAllJobOffers(){
         return jobOfferRepository.findAll();
+    }
+
+    public void markJobOfferAsUserFavourite(JobOffer jobOffer, User user){
+        Set<JobOffer> favouriteJobOffers=user.getFavouriteJobOffers();
+        favouriteJobOffers.add(jobOffer);
+        user.setFavouriteJobOffers(favouriteJobOffers);
+        userService.saveOrUpdate(user);
+        Set<User> userSet=jobOffer.getUsersFav();
+        userSet.add(user);
+        jobOffer.setUsersFav(userSet);
+        saveOrUpdate(jobOffer);
+    }
+
+    public JobOffer getJobOfferById(Long id) throws Exception {
+        Optional<JobOffer> optionalJobOffer = jobOfferRepository.findById(id);
+        if(optionalJobOffer.isPresent()){
+            return optionalJobOffer.get();
+        }else{
+            throw new Exception("offer not found");
+        }
     }
 
     public SearchResultJobOffersDto getSearchResultJobOffers(JobOfferCriteriaDto criteriaDto){
@@ -152,5 +176,9 @@ public class JobOfferService {
         TypedQuery<JobOffer> query=entityManager.createQuery(criteriaQuery);
         return query.getResultList();
 
+    }
+
+    public JobOffer saveOrUpdate(JobOffer jobOffer){
+        return jobOfferRepository.save(jobOffer);
     }
 }

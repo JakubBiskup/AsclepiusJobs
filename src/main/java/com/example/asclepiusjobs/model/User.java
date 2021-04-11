@@ -70,6 +70,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<JobApplication> jobApplications;
 
+    @ManyToMany
+    @JoinTable(name = "user_fav_job_offer",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "job_offer_id"))
+    private Set<JobOffer> favouriteJobOffers;
+
+
     public Long getId() {
         return id;
     }
@@ -204,5 +211,13 @@ public class User {
 
     public void setJobApplications(Set<JobApplication> jobApplications) {
         this.jobApplications = jobApplications;
+    }
+
+    public Set<JobOffer> getFavouriteJobOffers() {
+        return favouriteJobOffers;
+    }
+
+    public void setFavouriteJobOffers(Set<JobOffer> favouriteJobOffers) {
+        this.favouriteJobOffers = favouriteJobOffers;
     }
 }
