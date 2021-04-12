@@ -56,4 +56,8 @@ public class VerificationTokenService {
         System.out.println("deleting expired verification tokens");
         verificationTokenRepository.deleteByExpirationDateLessThan(new Date(System.currentTimeMillis()));
     }
+
+    public boolean checkIfUserHasVerificationToken(User user){
+        return verificationTokenRepository.findByUser(user).isPresent();
+    }
 }
