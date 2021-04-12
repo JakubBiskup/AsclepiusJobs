@@ -1,7 +1,7 @@
 package com.example.asclepiusjobs.controller;
 
+import com.example.asclepiusjobs.model.Location;
 import com.example.asclepiusjobs.model.User;
-import com.example.asclepiusjobs.model.weather.WeatherMain;
 import com.example.asclepiusjobs.service.UserService;
 import com.example.asclepiusjobs.service.WeatherService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,8 +24,8 @@ public class WeatherController {
 
     @GetMapping(value = "/weather/home")
     public ResponseEntity getWeatherAtHome() throws JsonProcessingException {
-        String cityName=getAuthenticatedUser().getLocation().getCity();
-        String weatherDescription=weatherService.getWeatherDescriptionInCity(cityName);
+        Location homeLocation=getAuthenticatedUser().getLocation();
+        String weatherDescription=weatherService.getWeatherDescriptionInLocation(homeLocation);
         return ResponseEntity.ok(weatherDescription);
 
     }
