@@ -2,11 +2,12 @@ package com.example.asclepiusjobs.dto;
 
 import com.example.asclepiusjobs.model.enums.Profession;
 
+import java.util.List;
+
 public class JobOfferCriteriaDto {
     private String country;
     private String city;
     private String title;
-    private Profession profession;
     private Integer maxDaysSinceCreation;
     private Integer minExperience;
     private Integer maxExperience;
@@ -15,6 +16,7 @@ public class JobOfferCriteriaDto {
     private String healthEstablishmentName;
     private Boolean showOlderFirst;
     private Pagination pagination;
+    private List<Profession> professions;
 
 
 
@@ -40,14 +42,6 @@ public class JobOfferCriteriaDto {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Profession getProfession() {
-        return profession;
-    }
-
-    public void setProfession(Profession profession) {
-        this.profession = profession;
     }
 
     public Integer getMaxDaysSinceCreation() {
@@ -113,4 +107,13 @@ public class JobOfferCriteriaDto {
     public void setPagination(Pagination pagination) {
         this.pagination = pagination;
     }
+
+    public List<Profession> getProfessions() {
+        return professions;
+    }
+
+    public void setProfessions(List<Profession> professions) {
+        this.professions = professions;
+    }
 }
+

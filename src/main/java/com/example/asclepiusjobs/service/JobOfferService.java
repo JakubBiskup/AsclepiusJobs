@@ -144,11 +144,6 @@ public class JobOfferService {
             Predicate titlePredicate=criteriaBuilder.like(jobOfferRoot.get("title"),"%"+title+"%");
             predicatesList.add(titlePredicate);
         }
-        Profession profession=criteriaDto.getProfession();
-        if(profession!=null){
-            Predicate professionPredicate=criteriaBuilder.equal(jobOfferRoot.get("profession"),profession);
-            predicatesList.add(professionPredicate);
-        }
         Integer maxDaysSinceCreation=criteriaDto.getMaxDaysSinceCreation();
         if(maxDaysSinceCreation!=null){
             Calendar calendar= GregorianCalendar.getInstance();
@@ -176,6 +171,16 @@ public class JobOfferService {
         if(maxSalary!=null){
             Predicate maxSalaryPredicate=criteriaBuilder.lessThanOrEqualTo(jobOfferRoot.get("salary"),maxSalary);
             predicatesList.add(maxSalaryPredicate);
+        }
+        List<Profession> professionList=criteriaDto.getProfessions();
+        if(professionList!=null&&!professionList.isEmpty()){
+            List<Predicate>professionPredicates=new ArrayList<>();
+            for(Profession profession:professionList){
+                Predicate singleProfessionPredicate=criteriaBuilder.equal(jobOfferRoot.get("profession"),profession);
+                professionPredicates.add(singleProfessionPredicate);
+            }
+            Predicate multipleProfessionsPredicate=criteriaBuilder.or(professionPredicates.toArray(new Predicate[]{}));
+            predicatesList.add(multipleProfessionsPredicate);
         }
                                     //health Establishment predicate
 

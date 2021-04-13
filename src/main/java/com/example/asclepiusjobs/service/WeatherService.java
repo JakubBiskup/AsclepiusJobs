@@ -2,7 +2,6 @@ package com.example.asclepiusjobs.service;
 
 import com.example.asclepiusjobs.model.Location;
 import com.example.asclepiusjobs.model.weather.WeatherMain;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,11 +19,11 @@ public class WeatherService {
     public WeatherService() throws IOException {
     }
 
-    public String getWeatherDescriptionInLocation(Location location) throws JsonProcessingException {
+    public String getWeatherDescriptionInLocation(Location location){
         return getWeatherMainInLocation(location).getMain().describeWeatherInString();
     }
 
-    public WeatherMain getWeatherMainInLocation(Location location) throws JsonProcessingException {
+    public WeatherMain getWeatherMainInLocation(Location location){
         RestTemplateBuilder restTemplateBuilder=new RestTemplateBuilder();
         RestTemplate restTemplate=getRestTemplate(restTemplateBuilder);
         WeatherMain weatherMain = restTemplate.getForObject("https://api.openweathermap.org/data/2.5/weather?q="
